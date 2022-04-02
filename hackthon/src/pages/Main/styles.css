@@ -1,0 +1,12 @@
+.div-people {
+  max-width: 100vw;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+
+  margin: 16px;
+
+  border: 1px solid black;
+}
