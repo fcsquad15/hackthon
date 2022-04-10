@@ -3,7 +3,7 @@ const conexao = require('../conexao');
 const listarUsuarios = async (req, res) => {
 
     try {
-        const usuarios = await conexao.query('SELECT * FROM usuario');
+        const usuarios = await conexao.query('SELECT * FROM usuarios');
 
         if (usuarios.rowCount === 0) {
             return res.status(400).json('Não foi possível encontrar usuários')
@@ -19,7 +19,7 @@ const listarUsuarios = async (req, res) => {
 const obterUsuario = async (req, res) => {
     const { id } = req.params;
     try {
-        const usuario = await conexao.query('SELECT * FROM usuario WHERE id = $1', [id]);
+        const usuario = await conexao.query('SELECT * FROM usuarios WHERE id = $1', [id]);
 
         if (usuario.rowCount === 0) {
             return res.status(400).json('Não foi possível encontrar o usuário')
@@ -54,7 +54,7 @@ const cadastrarUsuario = async (req, res) => {
     }
 
     try {
-        const novoUsuario = await conexao.query('INSERT INTO usuario (nome, email, senha, bio, avatar, area) VALUES ( $1, $2, $3, $4, $5, $6 )',
+        const novoUsuario = await conexao.query('INSERT INTO usuarios (nome, email, senha, bio, avatar, area) VALUES ( $1, $2, $3, $4, $5, $6 )',
             [nome, email, senha, bio, avatar, area]);
 
         if (novoUsuario.rowCount === 0) {
@@ -73,7 +73,7 @@ const atualizarUsuario = async (req, res) => {
     const { nome, email, senha, bio, avatar, area } = req.body;
 
     try {
-        const resposta = await conexao.query('UPDATE usuario SET nome = $1, email = $2, senha = $3, bio = $4, avatar = $5, area = $6 WHERE id = $7',
+        const resposta = await conexao.query('UPDATE usuarios SET nome = $1, email = $2, senha = $3, bio = $4, avatar = $5, area = $6 WHERE id = $7',
             [nome, email, senha, bio, avatar, area, id]);
 
         if (resposta.rowCount === 0) {
@@ -90,7 +90,7 @@ const atualizarUsuario = async (req, res) => {
 const deletarUsuario = async (req, res) => {
     const { id } = req.params;
     try {
-        const usuario = await conexao.query('DELETE FROM usuario WHERE id = $1', [id]);
+        const usuario = await conexao.query('DELETE FROM usuarios WHERE id = $1', [id]);
 
         if (usuario.rowCount === 0) {
             return res.status(400).json('Não foi possível excluir o usuário')

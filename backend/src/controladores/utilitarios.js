@@ -21,6 +21,27 @@ const cadastrarHabilidade = async (req, res) => {
     }
 }
 
+const cadastrarHorario = async (req, res) => {
+    const { hora } = req.body;
+
+    if (!hora) {
+        return res.status(404).json('Obrigatório informar hora')
+    }
+
+    try {
+        const novaHabilidade = await conexao.query('INSERT INTO horarios (hora) VALUES ( $1 )', [hora]);
+
+        if (novaHabilidade.rowCount === 0) {
+            return res.status(400).json('Não foi possível inserir a hora')
+        }
+
+        res.status(201).json({ 'mensagem': 'Hora Cadastrada' })
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json(error)
+    }
+}
+
 module.exports = {
-    cadastrarHabilidade
+    cadastrarHabilidade, cadastrarHorario
 }

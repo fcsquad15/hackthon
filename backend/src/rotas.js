@@ -15,17 +15,19 @@ rotas.put('/usuarios/:id', usuarios.atualizarUsuario);
 rotas.delete('/usuarios/:id', usuarios.deletarUsuario);
 rotas.post('/usuarios/habilidades/:id', usuarios.addHabilidade);
 rotas.get('/usuarios/habilidades/:id', usuarios.listarHabilidades);
+rotas.post('/', usuarios.login);
 
 // rotas para utilidades que não vamos usar no front, usei para testar a conexão com o banco de dados
 rotas.post('/habilidades', utilitarios.cadastrarHabilidade);
+rotas.post('/horarios', utilitarios.cadastrarHorario);
 
 
 // rotas para o forum
 rotas.get('/forum', forum.listarPerguntas);
-rotas.get('/forum', forum.listarPerguntasFiltroHabilidade);
-rotas.get('/forum/:id', forum.listarComentarios);
+rotas.get('/forum/filtro', forum.listarPerguntasFiltroHabilidade);
+rotas.get('/forum/:pergunta_id', forum.listarComentarios);
 rotas.post('/forum/', forum.criarPergunta); // id do usuário
-rotas.post('/forum/forum/:id', forum.comentarPergunta); // id do usuário
+rotas.post('/forum/:pergunta_id', forum.comentarPergunta); // id do usuário
 
 
 module.exports = rotas
