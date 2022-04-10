@@ -9,7 +9,7 @@ const criarPergunta = async (req, res) => {
     }
 
     try {
-        const novoPost = await conexao.query('INSERT INTO postagem (usuario_id, pergunta, horario, habilidade_id) VALUES ( $1, $2, current_timestamp, $3)',
+        const novoPost = await conexao.query('INSERT INTO postagem (usuario_id, pergunta, hora_postagem, habilidade_id) VALUES ( $1, $2, current_timestamp, $3)',
             [usuario_id, pergunta, habilidade_id]);
 
         if (novoPost.rowCount === 0) {
@@ -25,7 +25,7 @@ const criarPergunta = async (req, res) => {
 
 const comentarPergunta = async (req, res) => {
 
-    let { pergunta_id } = req.params;
+    let { postagem_id } = req.params;
     const { usuario_id, comentario } = req.body;
 
     if (!comentario) {
@@ -33,8 +33,8 @@ const comentarPergunta = async (req, res) => {
     }
 
     try {
-        const novoComentario = await conexao.query('INSERT INTO comentarios (usuario_id, pergunta_id, comentario, horario) VALUES ( $1, $2, $3, current_timestamp)',
-            [usuario_id, pergunta_id, comentario]);
+        const novoComentario = await conexao.query('INSERT INTO comentarios (usuario_id, postagem_id, comentario, hora_postagem) VALUES ( $1, $2, $3, current_timestamp)',
+            [usuario_id, postagem_id, comentario]);
 
         if (novoComentario.rowCount === 0) {
             return res.status(400).json('Não foi possível inserir o comentário')
@@ -81,10 +81,10 @@ const listarPerguntasFiltroHabilidade = async (req, res) => {
 }
 
 const listarComentarios = async (req, res) => {
-    let { pergunta_id } = req.params;
+    let { postagem_id } = req.params;
 
     try {
-        const comentarios = await conexao.query('SELECT * FROM comentarios WHERE pergunta_id = $1', [pergunta_id]);
+        const comentarios = await conexao.query('SELECT * FROM comentarios WHERE postagem_id = $1', [postagem_id]);
 
         if (comentarios.rowCount === 0) {
             return res.status(400).json('Não foi possível encontrar comentarios')

@@ -9,12 +9,12 @@ const rotas = express();
 
 //rotas para manuseio do usuário
 rotas.get('/usuarios', usuarios.listarUsuarios);
-rotas.get('/usuarios/:id', usuarios.obterUsuario);
+rotas.get('/usuarios/:id', usuarios.obterUsuario);//id do usuario
 rotas.post('/usuarios/', usuarios.cadastrarUsuario);
-rotas.put('/usuarios/:id', usuarios.atualizarUsuario);
-rotas.delete('/usuarios/:id', usuarios.deletarUsuario);
-rotas.post('/usuarios/habilidades/:id', usuarios.addHabilidade);
-rotas.get('/usuarios/habilidades/:id', usuarios.listarHabilidades);
+rotas.put('/usuarios/:id', usuarios.atualizarUsuario);//id do usuario
+rotas.delete('/usuarios/:id', usuarios.deletarUsuario);//id do usuario
+rotas.post('/usuarios/habilidades/:id', usuarios.addHabilidade); //id do usuario
+rotas.get('/usuarios/habilidades/:id', usuarios.listarHabilidades);//id do usuario
 rotas.post('/', usuarios.login);
 
 // rotas para utilidades que não vamos usar no front, usei para testar a conexão com o banco de dados
@@ -25,9 +25,9 @@ rotas.post('/horarios', utilitarios.cadastrarHorario);
 // rotas para o forum
 rotas.get('/forum', forum.listarPerguntas);
 rotas.get('/forum/filtro', forum.listarPerguntasFiltroHabilidade);
-rotas.get('/forum/:pergunta_id', forum.listarComentarios);
-rotas.post('/forum/', forum.criarPergunta); // id do usuário
-rotas.post('/forum/:pergunta_id', forum.comentarPergunta); // id do usuário
+rotas.get('/forum/:postagem_id', forum.listarComentarios); // id da postagem
+rotas.post('/forum/', forum.criarPergunta);
+rotas.post('/forum/:postagem_id', forum.comentarPergunta); // id da postagem
 
 
 module.exports = rotas
