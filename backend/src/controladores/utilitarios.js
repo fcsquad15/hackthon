@@ -1,10 +1,11 @@
 const conexao = require('../conexao')
 
+//TESTADO E RODANDO
 const cadastrarHabilidade = async (req, res) => {
     const { habilidade } = req.body;
 
     if (!habilidade) {
-        return res.status(404).json('Obrigatório informar habilidade')
+        return res.status(404).json({ 'mensagem': 'Obrigatório informar habilidade' })
     }
 
     try {
@@ -21,11 +22,12 @@ const cadastrarHabilidade = async (req, res) => {
     }
 }
 
+//TESTADO E RODANDO
 const cadastrarHorario = async (req, res) => {
     const { hora } = req.body;
 
     if (!hora) {
-        return res.status(404).json('Obrigatório informar hora')
+        return res.status(404).json({ 'mensagem': 'Obrigatório informar hora' })
     }
 
     try {
