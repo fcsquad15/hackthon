@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
   id SERIAL PRIMARY KEY,
   nome VARCHAR(100) NOT NULL,
   email VARCHAR(150) UNIQUE NOT NULL,
-  senha VARCHAR(20) NOT NULL,
+  senha TEXT NOT NULL,
   avatar TEXT,
   bio VARCHAR(255),
   area VARCHAR(50)
@@ -54,3 +54,4 @@ CREATE TABLE IF NOT EXISTS  comentarios (
   postagem_id INT REFERENCES postagem(id),
   hora_postagem TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
