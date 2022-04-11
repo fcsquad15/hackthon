@@ -27,6 +27,7 @@ rotas.get('/usuarios/habilidades/:id', usuarios.listarHabilidadesUsuario);//id d
 rotas.post('/habilidades', utilitarios.cadastrarHabilidade);
 rotas.get('/habilidades', utilitarios.listarHabilidade);
 rotas.post('/horarios', utilitarios.cadastrarHorario);
+rotas.get('/horarios', utilitarios.listarHorario);
 
 
 // rotas para o forum

@@ -60,6 +60,21 @@ const cadastrarHorario = async (req, res) => {
     }
 }
 
+//TESTADO E RODANDO
+const listarHorario = async (req, res) => {
+    try {
+        const horarios = await conexao.query('SELECT * FROM horarios');
+
+        if (horarios.rowCount === 0) {
+            return res.status(400).json({ "mensagem": 'Nenhum horarios encontrado' })
+        }
+
+        res.status(201).json(horarios.rows)
+    } catch (error) {
+        return res.status(400).json(error)
+    }
+}
+
 module.exports = {
-    cadastrarHabilidade, listarHabilidade, cadastrarHorario
+    cadastrarHabilidade, listarHabilidade, cadastrarHorario, listarHorario
 }

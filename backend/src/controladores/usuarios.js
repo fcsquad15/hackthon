@@ -15,7 +15,6 @@ const listarUsuarios = async (req, res) => {
 
         res.status(200).send(usuarios.rows);
     } catch (error) {
-        console.log(error)
         return res.status(400).json(error)
     }
 }
@@ -32,7 +31,6 @@ const obterUsuario = async (req, res) => {
 
         res.status(200).send(usuario.rows[0]);
     } catch (error) {
-        console.log(error)
         return res.status(400).json(error)
     }
 }
@@ -85,17 +83,18 @@ const listarHabilidadesUsuario = async (req, res) => {
     }
 
     try {
-        const habilidadesUsuario = await conexao.query('SELECT habilidades.habilidade        FROM habilidadeusuarios        LEFT JOIN usuarios ON usuarios.id= habilidadeusuarios.usuario_id        LEFT JOIN habilidades ON habilidades.id = habilidadeusuarios.habilidade_id  WHERE usuarios.id=$1     ', [id]);
+        const habilidadesUsuario = await conexao.query('SELECT habilidades.id, habilidades.habilidade        FROM habilidadeusuarios        LEFT JOIN usuarios ON usuarios.id= habilidadeusuarios.usuario_id        LEFT JOIN habilidades ON habilidades.id = habilidadeusuarios.habilidade_id  WHERE usuarios.id=$1     ', [id]);
 
         if (habilidadesUsuario.rowCount === 0) {
             return res.status(400).json({ "mensagem": 'Não foi possível encontrar usuários' })
         }
-        const habilidadeUsuarioLista = []
+        // const habilidadeUsuarioLista = []
 
-        habilidadesUsuario.rows.forEach((habilidade) => habilidadeUsuarioLista.push(habilidade.habilidade))
+        // habilidadesUsuario.rows.forEach((habilidade) => habilidadeUsuarioLista.push(habilidade))
+        // res.status(200).send({ "habilidades": habilidadeUsuarioLista });
 
-        // res.status(200).send(habilidadesUsuario.rows);
-        res.status(200).send({ "habilidades": habilidadeUsuarioLista });
+        res.status(200).send(habilidadesUsuario.rows);
+
     } catch (error) {
         res.status(400).json(error)
     }
@@ -162,7 +161,6 @@ const cadastrarUsuario = async (req, res) => {
 
         res.status(201).json({ 'mensagem': 'Usuário Cadastrado' })
     } catch (error) {
-        console.log(error)
         return res.status(400).json(error)
     }
 }
@@ -199,7 +197,6 @@ const atualizarUsuario = async (req, res) => {
 
         res.status(200).json({ 'mensagem': 'Usuário atualizado com sucesso' })
     } catch (error) {
-        console.log(error)
         return res.status(400).json(error)
     }
 }
@@ -217,7 +214,6 @@ const deletarUsuario = async (req, res) => {
 
         res.status(200).json({ 'mensagem': 'Usuário excluido com sucesso' })
     } catch (error) {
-        console.log(error)
         return res.status(400).json(error)
     }
 }
