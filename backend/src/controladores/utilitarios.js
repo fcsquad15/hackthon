@@ -63,7 +63,7 @@ const cadastrarHorario = async (req, res) => {
 //TESTADO E RODANDO
 const listarHorario = async (req, res) => {
     try {
-        const horarios = await conexao.query('SELECT * FROM horarios');
+        const horarios = await conexao.query('SELECT * FROM horarios ORDER BY hora');
 
         if (horarios.rowCount === 0) {
             return res.status(400).json({ "mensagem": 'Nenhum horários encontrado' })

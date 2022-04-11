@@ -7,7 +7,7 @@ const segredo = require('../segredo');
 const listarUsuarios = async (req, res) => {
 
     try {
-        const usuarios = await conexao.query('SELECT id,nome,email,bio,area FROM usuarios');
+        const usuarios = await conexao.query('SELECT id,nome,email,bio,area,avatar FROM usuarios ORDER BY nome');
 
         if (usuarios.rowCount === 0) {
             return res.status(400).json({ "mensagem": 'Não foi possível encontrar usuários' })
@@ -23,7 +23,7 @@ const listarUsuarios = async (req, res) => {
 const obterUsuario = async (req, res) => {
     const { id } = req.params;
     try {
-        const usuario = await conexao.query('SELECT id,nome,email,bio,area FROM usuarios WHERE id = $1', [id]);
+        const usuario = await conexao.query('SELECT id,nome,email,bio,area,avatar FROM usuarios WHERE id = $1', [id]);
 
         if (usuario.rowCount === 0) {
             return res.status(400).json('Não foi possível encontrar o usuário')
