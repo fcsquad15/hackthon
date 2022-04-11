@@ -23,6 +23,22 @@ const cadastrarHabilidade = async (req, res) => {
 }
 
 //TESTADO E RODANDO
+const listarHabilidade = async (req, res) => {
+    try {
+        const habilidades = await conexao.query('SELECT * FROM habilidades');
+
+        if (habilidades.rowCount === 0) {
+            return res.status(400).json('Não foi possível inserir a habilidade')
+        }
+
+        res.status(201).json(habilidades.rows)
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json(error)
+    }
+}
+
+//TESTADO E RODANDO
 const cadastrarHorario = async (req, res) => {
     const { hora } = req.body;
 
@@ -45,5 +61,5 @@ const cadastrarHorario = async (req, res) => {
 }
 
 module.exports = {
-    cadastrarHabilidade, cadastrarHorario
+    cadastrarHabilidade, listarHabilidade, cadastrarHorario
 }

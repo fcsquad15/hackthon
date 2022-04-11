@@ -37,12 +37,68 @@ const obterUsuario = async (req, res) => {
     }
 }
 
-const addHabilidade = (req, res) => {
+//TESTADO E RODANDO
+const addHabilidadeUsuario = async (req, res) => {
+    const { usuario_id, habilidade_id } = req.body;
 
-    return res.status(201).json()
+    if (!usuario_id || !habilidade_id) {
+        return res.status(404).json({ "mensagem": 'Dados obrigatórios não informados.' })
+    }
+
+    try {
+        const { rowCount: buscarUsuario } = await conexao.query('SELECT * FROM usuarios WHERE id = $1', [usuario_id]);
+
+        if (buscarUsuario === 0) {
+            return res.status(400).json({ "mensagem": "Usuário não encontrado" });
+        }
+
+        const { rowCount: habilidadeExistente } = await conexao.query('SELECT * FROM habilidadeusuarios WHERE usuario_id=$1 AND habilidade_id=$2', [usuario_id, habilidade_id])
+
+        if (habilidadeExistente > 0) {
+            return res.status(400).json({ "mensagem": "Habilidade já cadastrada" })
+        }
+
+        const novaHabilidade = await conexao.query('INSERT INTO habilidadeusuarios (usuario_id,habilidade_id) VALUES ( $1, $2)',
+            [usuario_id, habilidade_id]);
+
+        if (novaHabilidade.rowCount === 0) {
+            return res.status(400).json({ "mensagem": 'Não foi possível inserir a habilidade' })
+        }
+
+        res.status(201).json({ 'mensagem': 'Habilidade inserida com sucesso' })
+
+
+    } catch (error) {
+        return res.status(400).json(error)
+    }
+
 }
 
-const listarHabilidades = (req, res) => {
+//TESTADO E RODANDO
+const listarHabilidadesUsuario = async (req, res) => {
+    const { id } = req.params;
+
+    if (!id) {
+        return res.status(404).json({ "mensagem": 'Dados obrigatórios não informados.' })
+    }
+
+    try {
+
+        const habilidadesUsuario = await conexao.query('SELECT habilidades.habilidade        FROM habilidadeusuarios        LEFT JOIN usuarios ON usuarios.id= habilidadeusuarios.usuario_id        LEFT JOIN habilidades ON habilidades.id = habilidadeusuarios.habilidade_id  WHERE usuarios.id=$1     ', [id]);
+
+        if (habilidadesUsuario.rowCount === 0) {
+            return res.status(400).json({ "mensagem": 'Não foi possível encontrar usuários' })
+        }
+        const habilidadeUsuarioLista = []
+
+        habilidadesUsuario.rows.forEach((habilidade) => habilidadeUsuarioLista.push(habilidade.habilidade))
+
+        // res.status(200).send(habilidadesUsuario.rows);
+        res.status(200).send({ "habilidades": habilidadeUsuarioLista });
+    } catch (error) {
+        res.status(400).json(error)
+    }
+
     return res.status(200).json()
 }
 
@@ -92,6 +148,7 @@ const cadastrarUsuario = async (req, res) => {
         if (buscarUsuario > 0) {
             return res.status(400).json({ "mensagem": "Já existe usuário cadastrado para o e-mail fornecido." });
         }
+
         const senhaEncriptada = await bcrypt.hash(String(senha), 10);
 
 
@@ -162,5 +219,5 @@ const deletarUsuario = async (req, res) => {
 }
 
 module.exports = {
-    listarUsuarios, obterUsuario, addHabilidade, listarHabilidades, login, cadastrarUsuario, atualizarUsuario, deletarUsuario
+    listarUsuarios, obterUsuario, addHabilidadeUsuario, listarHabilidadesUsuario, login, cadastrarUsuario, atualizarUsuario, deletarUsuario
 }
