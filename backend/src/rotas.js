@@ -2,6 +2,7 @@ const express = require('express');
 const usuarios = require('./controladores/usuarios');
 const utilitarios = require('./controladores/utilitarios');
 const forum = require('./controladores/forum');
+const mentorias = require('./controladores/mentorias');
 const verificarLogin = require('./intermediarios/verificarlogin');
 
 
@@ -29,7 +30,6 @@ rotas.get('/habilidades', utilitarios.listarHabilidade);
 rotas.post('/horarios', utilitarios.cadastrarHorario);
 rotas.get('/horarios', utilitarios.listarHorario);
 
-
 // rotas para o forum
 rotas.get('/forum', forum.listarPerguntas);
 rotas.get('/forum/filtro', forum.listarPerguntasFiltroHabilidade);
@@ -37,5 +37,12 @@ rotas.get('/forum/:postagem_id', forum.listarComentarios); // id da postagem
 rotas.post('/forum/', forum.criarPergunta);
 rotas.post('/forum/:postagem_id', forum.comentarPergunta); // id da postagem
 
+// rotas para as mentorias
+rotas.get('/mentorias', mentorias.listarMentores)
+rotas.get('/mentorias/filtro', mentorias.filtrarMentorTema)
+rotas.get('/mentor', mentorias.listarDias)
+rotas.get('/mentor/dias', mentorias.listarDiasEHora)
+rotas.get('/mentor/horarios', mentorias.listarHorarios)
+rotas.post('/usuarios/mentorias', mentorias.disponibilizarHorario)
 
 module.exports = rotas
