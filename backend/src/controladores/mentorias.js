@@ -9,14 +9,14 @@ const listarMentores = (req, res) => {
 }
 
 //Fazer
-const filtrarMentores = (req, res) => {
+const filtrarMentorTema = (req, res) => {
 
 }
 
-//Fazer
-const filtrarMentoriaTema = (req, res) => {
+// //Fazer
+// const filtrarMentoriaTema = (req, res) => {
 
-}
+// }
 
 const listarDias = (req, res) => {
 
@@ -42,5 +42,5 @@ const listarMentoriasMarcadas = (req, res) => {
 
 
 module.exports = {
-    disponibilizarHorario, listarDias, listarHorarios, marcarMentoria
+    disponibilizarHorario, listarMentores, filtrarMentorTema, listarMentoriasMarcadas, listarDias, listarHorarios, marcarMentoria
 }

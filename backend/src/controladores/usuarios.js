@@ -30,7 +30,7 @@ const obterUsuario = async (req, res) => {
             return res.status(400).json('Não foi possível encontrar o usuário')
         }
 
-        res.status(200).send(usuario.rows);
+        res.status(200).send(usuario.rows[0]);
     } catch (error) {
         console.log(error)
         return res.status(400).json(error)
@@ -39,6 +39,8 @@ const obterUsuario = async (req, res) => {
 
 //TESTADO E RODANDO
 const addHabilidadeUsuario = async (req, res) => {
+    // const { id: usuario_id } = req.usuario // para usar com Autenticaçaõ
+    // const { habilidade_id } = req.body;
     const { usuario_id, habilidade_id } = req.body;
 
     if (!usuario_id || !habilidade_id) {
@@ -83,7 +85,6 @@ const listarHabilidadesUsuario = async (req, res) => {
     }
 
     try {
-
         const habilidadesUsuario = await conexao.query('SELECT habilidades.habilidade        FROM habilidadeusuarios        LEFT JOIN usuarios ON usuarios.id= habilidadeusuarios.usuario_id        LEFT JOIN habilidades ON habilidades.id = habilidadeusuarios.habilidade_id  WHERE usuarios.id=$1     ', [id]);
 
         if (habilidadesUsuario.rowCount === 0) {
@@ -168,6 +169,7 @@ const cadastrarUsuario = async (req, res) => {
 
 //TESTADO ALTERADO E RODANDO
 const atualizarUsuario = async (req, res) => {
+    // const { id } = req.usuario; Para usar com autenticação
     const { id } = req.params;
     const { nome, email, senha, bio, avatar, area } = req.body;
 
@@ -203,6 +205,8 @@ const atualizarUsuario = async (req, res) => {
 }
 
 const deletarUsuario = async (req, res) => {
+    // const { id } = req.usuario; Para usar com autenticação
+
     const { id } = req.params;
     try {
         const usuario = await conexao.query('DELETE FROM usuarios WHERE id = $1', [id]);
