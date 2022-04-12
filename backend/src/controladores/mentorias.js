@@ -184,9 +184,60 @@ const listarHorarios = async (req, res) => {
 }
 
 
-//Fazer
+//Falta Testar
 const marcarMentoria = async (req, res) => {
-    return res.status(200).json()
+    // const { usuario_id } = req.usuario // para usar com Autenticaçaõ
+    // const { agenda_id } = req.body;
+    const { usuario_id, agenda_id } = req.body;
+
+    if (!usuario_id || !agenda_id) {
+        return res.status(400).json({ 'mensagem': 'Usuário ou Agenda id não informado' })
+    }
+
+    try {
+        const novaMentoria = await conexao.query('INSERT INTO mentorias (usuario_id,agenda_id) VALUES ($1,$2)', [usuario_id, agenda_id]);
+
+        if (novaMentoria.rowCount === 0) {
+            return res.status(400).json({ 'mensagem': 'Não foi possível agendar sua mentoria' })
+        }
+
+        const { rowCount: mentoriaMarcada } = await conexao.query('UPDATE agenda SET disponivel=false WHERE id=$1', [agenda_id]);
+
+        if (mentoriaMarcada === 0) {
+            return res.status(400).json({ 'mensagem': 'Não foi possível agendar sua mentoria' })
+        }
+
+        const { rows: buscarMentorado } = await conexao.query('SELECT * FROM usuarios WHERE id = $1', [usuario_id]);
+
+        const { rows: buscarMentor } = await conexao.query('SELECT usuarios.id AS userId usuarios.nome,agenda.data,horarios.hora FROM agenda LEFT JOIN usuarios ON agenda.usuario_id=usuarios.id  LEFT JOIN horarios ON agenda.hora_id=horario.id WHERE agenda.id = $1', [agenda_id]);
+
+
+        const mensagemMentorado = `Mentoria com ${buscarMentor[0].nome} (${buscarMentor[0].data[0]} às ${buscarMentor.hora}) agendada com sucesso. Você receberá uma notificação 15 minutos antes dela começar e um chat entre vocês será aberto automaticamente.`
+
+        const mensagemMentor = `Sua mentoria ${buscarMentor[0].data[0]} às ${buscarMentor.hora}) foi agendada por ${buscarMentorado[0].nome} . Você receberá uma notificação 15 minutos antes dela começar e um chat entre vocês será aberto automaticamente.`
+
+        try {
+            const notificaoMentorado = await conexao.query('INSERT INTO notificao (usuario_id,mensagem VALUES ($1,$2)', [usuario_id, mensagemMentorado])
+
+            if (notificaoMentorado.rowCount === 0) {
+                return res.status(400).json({ 'mensagem': 'Não foi possível criar a notificação.' })
+            }
+
+            const notificaoMentor = await conexao.query('INSERT INTO notificao (usuario_id,mensagem VALUES ($1,$2)', [buscarMentor[0].userId, mensagemMentor])
+
+            if (notificaoMentor.rowCount === 0) {
+                return res.status(400).json({ 'mensagem': 'Não foi possível criar a notificação.' })
+            }
+
+        } catch (error) {
+            return res.status(500).json(error)
+        }
+
+    } catch (error) {
+        return res.status(400).json(error)
+
+    }
+
 }
 
 //Fazer

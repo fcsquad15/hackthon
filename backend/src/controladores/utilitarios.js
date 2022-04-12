@@ -86,6 +86,7 @@ const cadastrarAreas = async (req, res) => {
 }
 
 
+
 module.exports = {
     cadastrarHabilidade, listarHabilidade, cadastrarHorario, listarHorario, listarAreas, cadastrarAreas
 }

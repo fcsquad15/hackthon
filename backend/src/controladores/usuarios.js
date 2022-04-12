@@ -93,7 +93,7 @@ const listarHabilidadesUsuario = async (req, res) => {
         // habilidadesUsuario.rows.forEach((habilidade) => habilidadeUsuarioLista.push(habilidade))
         // res.status(200).send({ "habilidades": habilidadeUsuarioLista });
 
-        res.status(200).send(habilidadesUsuario.rows);
+        res.status(200).json(habilidadesUsuario.rows);
 
     } catch (error) {
         res.status(400).json(error)
