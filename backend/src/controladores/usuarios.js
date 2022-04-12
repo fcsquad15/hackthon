@@ -7,7 +7,7 @@ const segredo = require('../segredo');
 const listarUsuarios = async (req, res) => {
 
     try {
-        const usuarios = await conexao.query('SELECT id,nome,email,bio,area,avatar FROM usuarios ORDER BY nome');
+        const usuarios = await conexao.query('SELECT id,nome,email,bio,avatar FROM usuarios ORDER BY nome');
 
         if (usuarios.rowCount === 0) {
             return res.status(400).json({ "mensagem": 'Não foi possível encontrar usuários' })
@@ -17,13 +17,13 @@ const listarUsuarios = async (req, res) => {
     } catch (error) {
         return res.status(400).json(error)
     }
-}
+};
 
 //TESTADO E RODANDO
 const obterUsuario = async (req, res) => {
     const { id } = req.params;
     try {
-        const usuario = await conexao.query('SELECT id,nome,email,bio,area,avatar FROM usuarios WHERE id = $1', [id]);
+        const usuario = await conexao.query('SELECT id,nome,email,bio,avatar FROM usuarios WHERE id = $1', [id]);
 
         if (usuario.rowCount === 0) {
             return res.status(400).json('Não foi possível encontrar o usuário')
@@ -102,6 +102,17 @@ const listarHabilidadesUsuario = async (req, res) => {
     return res.status(200).json()
 }
 
+//FAZER (tabela area colunas id, area
+//  tabela areausuarios colunas id, usuario_id, area_is )
+const addAreaUsuario = async (req, res) => {
+
+}
+
+//FAZER
+const listarAreaUsuario = async (req, res) => {
+
+}
+
 //TESTADO E RODANDO
 const login = async (req, res) => {
     const { email, senha } = req.body;
@@ -169,7 +180,7 @@ const cadastrarUsuario = async (req, res) => {
 const atualizarUsuario = async (req, res) => {
     // const { id } = req.usuario; Para usar com autenticação
     const { id } = req.params;
-    const { nome, email, senha, bio, avatar, area } = req.body;
+    const { nome, email, senha, bio, avatar } = req.body;
 
     try {
         const localizarUsuário = await conexao.query('SELECT * FROM usuarios WHERE id = $1', [id]);
@@ -186,10 +197,9 @@ const atualizarUsuario = async (req, res) => {
         const novoEmail = (email ? email : localizarUsuário.rows[0].email);
         const novaBio = (bio ? bio : localizarUsuário.rows[0].bio);
         const novoAvatar = (avatar ? avatar : localizarUsuário.rows[0].avatar);
-        const novaArea = (area ? area : localizarUsuário.rows[0].area);
 
-        const resposta = await conexao.query('UPDATE usuarios SET nome = $1, email = $2, senha = $3, bio = $4, avatar = $5, area = $6 WHERE id = $7',
-            [novoNome, novoEmail, novaSenha, novaBio, novoAvatar, novaArea, id]);
+        const resposta = await conexao.query('UPDATE usuarios SET nome = $1, email = $2, senha = $3, bio = $4, avatar = $5 WHERE id = $6',
+            [novoNome, novoEmail, novaSenha, novaBio, novoAvatar, id]);
 
         if (resposta.rowCount === 0) {
             return res.status(400).json({ "mensagem": 'Não foi possível atualizar o usuário' })
@@ -219,5 +229,5 @@ const deletarUsuario = async (req, res) => {
 }
 
 module.exports = {
-    listarUsuarios, obterUsuario, addHabilidadeUsuario, listarHabilidadesUsuario, login, cadastrarUsuario, atualizarUsuario, deletarUsuario
+    listarUsuarios, obterUsuario, addHabilidadeUsuario, listarHabilidadesUsuario, login, cadastrarUsuario, atualizarUsuario, deletarUsuario, addAreaUsuario, listarAreaUsuario
 }

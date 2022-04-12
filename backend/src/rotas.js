@@ -23,12 +23,16 @@ rotas.put('/usuarios/', usuarios.atualizarUsuario);//id do usuario
 rotas.delete('/usuarios/:id', usuarios.deletarUsuario);//id do usuario
 rotas.post('/usuarios/habilidades', usuarios.addHabilidadeUsuario);
 rotas.get('/usuarios/habilidades/:id', usuarios.listarHabilidadesUsuario);//id do usuario
+rotas.post('/usuarios/areas', usuarios.addHabilidadeUsuario);// FAZER
+rotas.get('/usuarios/areas/:id', usuarios.listarHabilidadesUsuario);//FAZER id do usuario
 
 // rotas para utilidades que não vamos usar no front, usei para testar a conexão com o banco de dados
 rotas.post('/habilidades', utilitarios.cadastrarHabilidade);
 rotas.get('/habilidades', utilitarios.listarHabilidade);
 rotas.post('/horarios', utilitarios.cadastrarHorario);
 rotas.get('/horarios', utilitarios.listarHorario);
+rotas.post('/areas', utilitarios.cadastrarAreas);//FAZER
+rotas.get('/areas', utilitarios.listarAreas);//FAZER
 
 // rotas para o forum
 rotas.get('/forum', forum.listarPerguntas);
@@ -38,11 +42,12 @@ rotas.post('/forum/', forum.criarPergunta);
 rotas.post('/forum/:postagem_id', forum.comentarPergunta); // id da postagem
 
 // rotas para as mentorias
-rotas.get('/mentorias', mentorias.listarMentores)
-rotas.get('/mentorias/filtro', mentorias.filtrarMentorTema)
-rotas.get('/mentor', mentorias.listarDias)
-rotas.get('/mentor/dias', mentorias.listarDiasEHora)
-rotas.get('/mentor/horarios', mentorias.listarHorarios)
-rotas.post('/usuarios/mentorias', mentorias.disponibilizarHorario)
+rotas.get('/mentorias', mentorias.listarMentores);
+rotas.get('/mentorias/filtroHab', mentorias.filtrarMentorTema);
+rotas.get('/mentorias/filtroArea', mentorias.filtrarMentorArea);
+rotas.get('/mentor', mentorias.listarDias);
+rotas.get('/mentor/dias', mentorias.listarDiasEHora);
+rotas.get('/mentor/horarios', mentorias.listarHorarios);
+rotas.post('/usuarios/mentorias', mentorias.disponibilizarHorario);
 
 module.exports = rotas

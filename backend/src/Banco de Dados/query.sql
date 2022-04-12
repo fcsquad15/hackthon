@@ -55,3 +55,14 @@ CREATE TABLE IF NOT EXISTS  comentarios (
   hora_postagem TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS area (
+	id SERIAL PRIMARY KEY,
+  	area VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS  areaUsuarios (
+  id SERIAL PRIMARY KEY,
+  usuario_id INT REFERENCES usuarios(id),
+  area_id INT REFERENCES area(id)
+);
+

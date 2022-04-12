@@ -75,6 +75,17 @@ const listarHorario = async (req, res) => {
     }
 }
 
+//FAZER - MAIOR PRIORIDADE
+const listarAreas = async (req, res) => {
+
+}
+
+//FAZER
+const cadastrarAreas = async (req, res) => {
+
+}
+
+
 module.exports = {
-    cadastrarHabilidade, listarHabilidade, cadastrarHorario, listarHorario
+    cadastrarHabilidade, listarHabilidade, cadastrarHorario, listarHorario, listarAreas, cadastrarAreas
 }

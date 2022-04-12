@@ -75,9 +75,28 @@ const filtrarMentorTema = async (req, res) => {
     }
 }
 
-// //Fazer
-// const filtrarMentoriaTema = (req, res) => {
-// }
+//FAZER
+const filtrarMentorArea = async (req, res) => {
+    const { habilidade } = req.query
+
+    if (!habilidade) {
+        return res.status(404).json({ "mensagem": 'É necessário informar o tema' })
+    }
+
+    try {
+        const mentores = await conexao.query('SELECT usuarios.id,usuarios.nome,usuarios.bio,usuarios.area FROM agenda LEFT JOIN usuarios ON agenda.usuario_id = usuarios.id LEFT JOIN habilidadeusuarios ON usuarios.id = habilidadeusuarios.usuario_id WHERE habilidadeusuarios.habilidade_id =$1 GROUP BY usuarios.id ', [habilidade]);
+
+        if (mentores.rowCount === 0) {
+            return res.status(400).json('Nenhum usuário encontradado para o tema')
+        }
+
+        res.status(201).json(mentores.rows)
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json(error.mensage)
+    }
+}
+
 
 //TESTADO E RODANDO
 const listarDias = async (req, res) => {
@@ -178,5 +197,5 @@ const listarMentoriasMarcadas = async (req, res) => {
 
 
 module.exports = {
-    disponibilizarHorario, listarMentores, filtrarMentorTema, listarMentoriasMarcadas, listarDias, listarHorarios, marcarMentoria, listarDiasEHora
+    disponibilizarHorario, listarMentores, filtrarMentorTema, filtrarMentorArea, listarMentoriasMarcadas, listarDias, listarHorarios, marcarMentoria, listarDiasEHora
 }
