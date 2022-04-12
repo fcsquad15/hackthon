@@ -43,8 +43,8 @@ rotas.post('/forum/:postagem_id', forum.comentarPergunta); // id da postagem
 
 // rotas para as mentorias
 rotas.get('/mentorias', mentorias.listarMentores);
-rotas.get('/mentorias/filtroHab', mentorias.filtrarMentorTema);
-rotas.get('/mentorias/filtroArea', mentorias.filtrarMentorArea);
+rotas.get('/mentorias/filtroHab', mentorias.filtrarMentorTema); // id da habilidade vai por req.query
+rotas.get('/mentorias/filtroArea', mentorias.filtrarMentorArea); //id da área vai por req.query
 rotas.get('/mentor', mentorias.listarDias);
 rotas.get('/mentor/dias', mentorias.listarDiasEHora);
 rotas.get('/mentor/horarios', mentorias.listarHorarios);

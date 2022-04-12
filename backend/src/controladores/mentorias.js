@@ -77,14 +77,14 @@ const filtrarMentorTema = async (req, res) => {
 
 //FAZER
 const filtrarMentorArea = async (req, res) => {
-    const { habilidade } = req.query
+    const { area } = req.query
 
-    if (!habilidade) {
-        return res.status(404).json({ "mensagem": 'É necessário informar o tema' })
+    if (!area) {
+        return res.status(404).json({ "mensagem": 'É necessário informar a área desejada.' })
     }
 
     try {
-        const mentores = await conexao.query('SELECT usuarios.id,usuarios.nome,usuarios.bio,usuarios.area FROM agenda LEFT JOIN usuarios ON agenda.usuario_id = usuarios.id LEFT JOIN habilidadeusuarios ON usuarios.id = habilidadeusuarios.usuario_id WHERE habilidadeusuarios.habilidade_id =$1 GROUP BY usuarios.id ', [habilidade]);
+        const mentores = await conexao.query('SELECT usuarios.id,usuarios.nome,usuarios.bio FROM agenda LEFT JOIN usuarios ON agenda.usuario_id = usuarios.id LEFT JOIN areausuarios ON usuarios.id = areausuarios.usuario_id WHERE areausuarios.area_id =$1 GROUP BY usuarios.id', [area]);
 
         if (mentores.rowCount === 0) {
             return res.status(400).json('Nenhum usuário encontradado para o tema')
