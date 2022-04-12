@@ -2,25 +2,37 @@ const express = require('express');
 const usuarios = require('./controladores/usuarios');
 const utilitarios = require('./controladores/utilitarios');
 const forum = require('./controladores/forum');
+const mentorias = require('./controladores/mentorias');
+const verificarLogin = require('./intermediarios/verificarlogin');
 
 
 
 const rotas = express();
 
+//rotas sem autenticação
+rotas.post('/', usuarios.login);
+rotas.post('/usuarios/', usuarios.cadastrarUsuario);
+
+// Autenticação
+// rotas.use(verificarLogin)
+
 //rotas para manuseio do usuário
 rotas.get('/usuarios', usuarios.listarUsuarios);
 rotas.get('/usuarios/:id', usuarios.obterUsuario);//id do usuario
-rotas.post('/usuarios/', usuarios.cadastrarUsuario);
-rotas.put('/usuarios/:id', usuarios.atualizarUsuario);//id do usuario
+rotas.put('/usuarios/', usuarios.atualizarUsuario);//id do usuario
 rotas.delete('/usuarios/:id', usuarios.deletarUsuario);//id do usuario
-rotas.post('/usuarios/habilidades/:id', usuarios.addHabilidade); //id do usuario
-rotas.get('/usuarios/habilidades/:id', usuarios.listarHabilidades);//id do usuario
-rotas.post('/', usuarios.login);
+rotas.post('/usuarios/habilidades', usuarios.addHabilidadeUsuario);
+rotas.get('/usuarios/habilidades/:id', usuarios.listarHabilidadesUsuario);//id do usuario
+rotas.post('/usuarios/areas', usuarios.addHabilidadeUsuario);// FAZER
+rotas.get('/usuarios/areas/:id', usuarios.listarHabilidadesUsuario);//FAZER id do usuario
 
 // rotas para utilidades que não vamos usar no front, usei para testar a conexão com o banco de dados
 rotas.post('/habilidades', utilitarios.cadastrarHabilidade);
+rotas.get('/habilidades', utilitarios.listarHabilidade);
 rotas.post('/horarios', utilitarios.cadastrarHorario);
-
+rotas.get('/horarios', utilitarios.listarHorario);
+rotas.post('/areas', utilitarios.cadastrarAreas);//FAZER
+rotas.get('/areas', utilitarios.listarAreas);//FAZER
 
 // rotas para o forum
 rotas.get('/forum', forum.listarPerguntas);
@@ -29,5 +41,13 @@ rotas.get('/forum/:postagem_id', forum.listarComentarios); // id da postagem
 rotas.post('/forum/', forum.criarPergunta);
 rotas.post('/forum/:postagem_id', forum.comentarPergunta); // id da postagem
 
+// rotas para as mentorias
+rotas.get('/mentorias', mentorias.listarMentores);
+rotas.get('/mentorias/filtroHab', mentorias.filtrarMentorTema); // id da habilidade vai por req.query
+rotas.get('/mentorias/filtroArea', mentorias.filtrarMentorArea); //id da área vai por req.query
+rotas.get('/mentor', mentorias.listarDias);
+rotas.get('/mentor/dias', mentorias.listarDiasEHora);
+rotas.get('/mentor/horarios', mentorias.listarHorarios);
+rotas.post('/usuarios/mentorias', mentorias.disponibilizarHorario);
 
 module.exports = rotas

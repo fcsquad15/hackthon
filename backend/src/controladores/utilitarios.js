@@ -12,10 +12,26 @@ const cadastrarHabilidade = async (req, res) => {
         const novaHabilidade = await conexao.query('INSERT INTO habilidades (habilidade) VALUES ( $1 )', [habilidade]);
 
         if (novaHabilidade.rowCount === 0) {
-            return res.status(400).json('Não foi possível inserir a habilidade')
+            return res.status(400).json({ 'mensagem': 'Não foi possível inserir a habilidade' })
         }
 
         res.status(201).json({ 'mensagem': 'Habilidade Cadastrada' })
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json(error)
+    }
+}
+
+//TESTADO E RODANDO
+const listarHabilidade = async (req, res) => {
+    try {
+        const habilidades = await conexao.query('SELECT * FROM habilidades');
+
+        if (habilidades.rowCount === 0) {
+            return res.status(400).json({ "mensagem": 'Não foi possível listar as habilidades.' })
+        }
+
+        res.status(201).json(habilidades.rows)
     } catch (error) {
         console.log(error)
         return res.status(400).json(error)
@@ -27,14 +43,14 @@ const cadastrarHorario = async (req, res) => {
     const { hora } = req.body;
 
     if (!hora) {
-        return res.status(404).json({ 'mensagem': 'Obrigatório informar hora' })
+        return res.status(404).json({ 'mensagem': 'Obrigatório informar o horário.' })
     }
 
     try {
         const novaHabilidade = await conexao.query('INSERT INTO horarios (hora) VALUES ( $1 )', [hora]);
 
         if (novaHabilidade.rowCount === 0) {
-            return res.status(400).json('Não foi possível inserir a hora')
+            return res.status(400).json({ 'mensagem': 'Não foi possível inserir a hora' })
         }
 
         res.status(201).json({ 'mensagem': 'Hora Cadastrada' })
@@ -44,6 +60,32 @@ const cadastrarHorario = async (req, res) => {
     }
 }
 
+//TESTADO E RODANDO
+const listarHorario = async (req, res) => {
+    try {
+        const horarios = await conexao.query('SELECT * FROM horarios ORDER BY hora');
+
+        if (horarios.rowCount === 0) {
+            return res.status(400).json({ "mensagem": 'Nenhum horários encontrado' })
+        }
+
+        res.status(201).json(horarios.rows)
+    } catch (error) {
+        return res.status(400).json(error)
+    }
+}
+
+//FAZER - MAIOR PRIORIDADE
+const listarAreas = async (req, res) => {
+
+}
+
+//FAZER
+const cadastrarAreas = async (req, res) => {
+
+}
+
+
 module.exports = {
-    cadastrarHabilidade, cadastrarHorario
+    cadastrarHabilidade, listarHabilidade, cadastrarHorario, listarHorario, listarAreas, cadastrarAreas
 }
