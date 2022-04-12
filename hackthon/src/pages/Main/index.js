@@ -1,23 +1,15 @@
-import Card from '../../components/Cards'
-import { people } from '../../data/data'
-import './styles.css';
+import React from 'react';
 
-function Main() {
+import { BrowserRouter } from 'react-router-dom';
+import Router from '../../Routes';
+
+export default function Main() {
+
   return (
-    <div className="div-people">
-      {
-        people.map((person) => (
-          <div key={person.id}>
-            < Card
-              id={person.id}
-              avatar={person.avatar}
-              name={person.name}
-            />
-          </div>
-        ))
-      }
-    </div>
+    <>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
+    </>
   );
 }
-
-export default Main;
