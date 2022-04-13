@@ -40,7 +40,7 @@ const disponibilizarHorario = async (req, res) => {
 //TESTADO E RODANDO
 const listarMentores = async (req, res) => {
     try {
-        const mentores = await conexao.query('SELECT usuarios.id,usuarios.nome,usuarios.bio,usuarios.area FROM agenda LEFT JOIN usuarios ON agenda.usuario_id = usuarios.id GROUP BY usuarios.id');
+        const mentores = await conexao.query('SELECT usuarios.id,usuarios.nome,usuarios.bio, usuarios.avatar FROM agenda LEFT JOIN usuarios ON agenda.usuario_id = usuarios.id GROUP BY usuarios.id');
 
         if (mentores.rowCount === 0) {
             return res.status(400).json('Não foi possível listar as mentorias')
@@ -58,14 +58,14 @@ const filtrarMentorTema = async (req, res) => {
     const { habilidade } = req.query
 
     if (!habilidade) {
-        return res.status(404).json({ "mensagem": 'É necessário informar o tema' })
+        return res.status(404).json({ "mensagem": 'É necessário informar a habilidade' })
     }
 
     try {
-        const mentores = await conexao.query('SELECT usuarios.id,usuarios.nome,usuarios.bio,usuarios.area FROM agenda LEFT JOIN usuarios ON agenda.usuario_id = usuarios.id LEFT JOIN habilidadeusuarios ON usuarios.id = habilidadeusuarios.usuario_id WHERE habilidadeusuarios.habilidade_id =$1 GROUP BY usuarios.id ', [habilidade]);
+        const mentores = await conexao.query('SELECT usuarios.id,usuarios.nome,usuarios.bio, usuarios.avatar FROM agenda LEFT JOIN usuarios ON agenda.usuario_id = usuarios.id LEFT JOIN habilidadeusuarios ON usuarios.id = habilidadeusuarios.usuario_id WHERE habilidadeusuarios.habilidade_id =$1 GROUP BY usuarios.id ', [habilidade]);
 
         if (mentores.rowCount === 0) {
-            return res.status(400).json('Nenhum usuário encontradado para o tema')
+            return res.status(400).json('Nenhum mentor encontrado para a habilidade desejada')
         }
 
         res.status(201).json(mentores.rows)
@@ -84,10 +84,10 @@ const filtrarMentorArea = async (req, res) => {
     }
 
     try {
-        const mentores = await conexao.query('SELECT usuarios.id,usuarios.nome,usuarios.bio FROM agenda LEFT JOIN usuarios ON agenda.usuario_id = usuarios.id LEFT JOIN areausuarios ON usuarios.id = areausuarios.usuario_id WHERE areausuarios.area_id =$1 GROUP BY usuarios.id', [area]);
+        const mentores = await conexao.query('SELECT usuarios.id,usuarios.nome,usuarios.bio, usuarios.avatar FROM agenda LEFT JOIN usuarios ON agenda.usuario_id = usuarios.id LEFT JOIN areausuarios ON usuarios.id = areausuarios.usuario_id WHERE areausuarios.area_id =$1 GROUP BY usuarios.id', [area]);
 
         if (mentores.rowCount === 0) {
-            return res.status(400).json('Nenhum usuário encontradado para o tema')
+            return res.status(400).json('Nenhum mentor encontrado para a área desejada.')
         }
 
         res.status(201).json(mentores.rows)
@@ -126,6 +126,7 @@ const listarDias = async (req, res) => {
     }
 }
 
+//TESTADO E RODANDO
 const listarDiasEHora = async (req, res) => {
     const { mentor } = req.query
 
@@ -184,7 +185,7 @@ const listarHorarios = async (req, res) => {
 }
 
 
-//Falta Testar
+//TESTADO
 const marcarMentoria = async (req, res) => {
     // const { usuario_id } = req.usuario // para usar com Autenticaçaõ
     // const { agenda_id } = req.body;
@@ -195,7 +196,13 @@ const marcarMentoria = async (req, res) => {
     }
 
     try {
-        const novaMentoria = await conexao.query('INSERT INTO mentorias (usuario_id,agenda_id) VALUES ($1,$2)', [usuario_id, agenda_id]);
+        const { mentoriaDisponivel } = await conexao.query('SELECT * FROM agenda WHERE id=$1 AND disponivel=true', [agenda_id])
+
+        if (mentoriaDisponivel.rowCount === 0) {
+            return res.status(400).json({ 'mensagem': 'Não foi possível marcar a mentoria' })
+        }
+
+        const novaMentoria = await conexao.query('INSERT INTO mentorias (usuario_mentorado_id,agenda_id) VALUES ($1,$2)', [usuario_id, agenda_id]);
 
         if (novaMentoria.rowCount === 0) {
             return res.status(400).json({ 'mensagem': 'Não foi possível agendar sua mentoria' })
@@ -207,42 +214,60 @@ const marcarMentoria = async (req, res) => {
             return res.status(400).json({ 'mensagem': 'Não foi possível agendar sua mentoria' })
         }
 
-        const { rows: buscarMentorado } = await conexao.query('SELECT * FROM usuarios WHERE id = $1', [usuario_id]);
+        const { rows: buscarMentorado } = await conexao.query('SELECT nome FROM usuarios WHERE id = $1', [usuario_id]);
 
-        const { rows: buscarMentor } = await conexao.query('SELECT usuarios.id AS userId usuarios.nome,agenda.data,horarios.hora FROM agenda LEFT JOIN usuarios ON agenda.usuario_id=usuarios.id  LEFT JOIN horarios ON agenda.hora_id=horario.id WHERE agenda.id = $1', [agenda_id]);
+        const { rows: buscarMentor } = await conexao.query('SELECT usuarios.id, usuarios.nome,agenda.dia ,horarios.hora FROM agenda LEFT JOIN usuarios ON agenda.usuario_id=usuarios.id  LEFT JOIN horarios ON agenda.hora_id=horarios.id WHERE agenda.id = $1', [agenda_id]);
+
+        const dataParaFormatar = new Date(buscarMentor[0].dia)
+        const dataFormatada = new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC' }).format(dataParaFormatar)
+
+        const mensagemMentorado = `Mentoria com ${buscarMentor[0].nome} (${dataFormatada} às ${buscarMentor[0].hora}) foi agendada com sucesso. Você receberá uma notificação 15 minutos antes dela começar e um chat entre vocês será aberto automaticamente.`
+
+        const mensagemMentor = `Sua mentoria ${dataFormatada} às ${buscarMentor[0].hora} foi agendada por ${buscarMentorado[0].nome} . Você receberá uma notificação 15 minutos antes dela começar e um chat entre vocês será aberto automaticamente.`
 
 
-        const mensagemMentorado = `Mentoria com ${buscarMentor[0].nome} (${buscarMentor[0].data[0]} às ${buscarMentor.hora}) agendada com sucesso. Você receberá uma notificação 15 minutos antes dela começar e um chat entre vocês será aberto automaticamente.`
+        const notificaoMentorado = await conexao.query('INSERT INTO notificacao (usuario_id,mensagem) VALUES ($1,$2)', [usuario_id, mensagemMentorado])
 
-        const mensagemMentor = `Sua mentoria ${buscarMentor[0].data[0]} às ${buscarMentor.hora}) foi agendada por ${buscarMentorado[0].nome} . Você receberá uma notificação 15 minutos antes dela começar e um chat entre vocês será aberto automaticamente.`
-
-        try {
-            const notificaoMentorado = await conexao.query('INSERT INTO notificao (usuario_id,mensagem VALUES ($1,$2)', [usuario_id, mensagemMentorado])
-
-            if (notificaoMentorado.rowCount === 0) {
-                return res.status(400).json({ 'mensagem': 'Não foi possível criar a notificação.' })
-            }
-
-            const notificaoMentor = await conexao.query('INSERT INTO notificao (usuario_id,mensagem VALUES ($1,$2)', [buscarMentor[0].userId, mensagemMentor])
-
-            if (notificaoMentor.rowCount === 0) {
-                return res.status(400).json({ 'mensagem': 'Não foi possível criar a notificação.' })
-            }
-
-        } catch (error) {
-            return res.status(500).json(error)
+        if (notificaoMentorado.rowCount === 0) {
+            return res.status(400).json({ 'mensagem': 'Não foi possível criar a notificação.' })
         }
 
+        const notificaoMentor = await conexao.query('INSERT INTO notificacao (usuario_id,mensagem) VALUES ($1,$2)', [buscarMentor[0].id, mensagemMentor])
+
+        if (notificaoMentor.rowCount === 0) {
+            return res.status(400).json({ 'mensagem': 'Não foi possível criar a notificação.' })
+        }
+
+        return res.status(200).json({ 'mensagem': 'Mentoria marcada com sucesso' })
+
     } catch (error) {
+        console.log(error)
         return res.status(400).json(error)
-
     }
-
 }
 
 //Fazer
 const listarMentoriasMarcadas = async (req, res) => {
-    return res.status(200).json()
+    // para usar com Autenticação
+    // const { id: usuario_id } = req.usuario
+    const { usuario_id } = req.body
+
+    if (!usuario_id) {
+        return res.status(400).json({ 'mensagem': 'Usuário não informado' })
+    }
+
+    try {
+        const mentorias = await conexao.query('SELECT mentorias.id,agenda.dia,horarios.hora FROM mentorias    LEFT JOIN agenda ON mentorias.agenda_id=agenda.id    LEFT JOIN horarios ON agenda.hora_id=horarios.id    WHERE mentorias.usuario_mentorado_id=$1 AND agenda.dia<CURRENT_DATE ORDER BY agenda.dia,horarios.hora', [usuario_id])
+
+        if (mentorias.rowCount === 0) {
+            res.status(400).json({ 'mensagem': 'Nenhuma mentoria marcada' })
+        }
+
+        return res.status(200).json(mentorias.rows)
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json(error)
+    }
 }
 
 
