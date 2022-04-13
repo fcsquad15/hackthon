@@ -66,3 +66,11 @@ CREATE TABLE IF NOT EXISTS  areaUsuarios (
   area_id INT REFERENCES area(id)
 );
 
+
+CREATE TABLE IF NOT EXISTS  notificacao (
+  id SERIAL PRIMARY KEY,
+  usuario_id INT REFERENCES usuarios(id),
+  mensagem TEXT NOT NULL,
+  lida BOOLEAN DEFAULT FALSE,
+  data_time TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
