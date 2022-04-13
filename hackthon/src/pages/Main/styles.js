@@ -9,7 +9,7 @@ export const MainContainer = styled.main`
     grid-template-rows: 12vh 1fr;
     grid-template-areas: 
         "Lblank topHeader topHeader topHeader Rblank"
-        "Lblank sideMenu mainContent rightContent Rblank";
+        "Lblank mainContent mainContent mainContent Rblank";
 
     .Lblank{
         grid-area: Lblank;
@@ -19,20 +19,11 @@ export const MainContainer = styled.main`
         grid-area: topHeader;
     }
 
-    .sideMenu{
-        grid-area: sideMenu;
-    }
-
     .mainContent{
         grid-area: mainContent;
-    }
-
-    .rightContent{
-        grid-area: rightContent;
     }
 
     .Rblank{
         grid-area: Rblank;
     }
-
 `
