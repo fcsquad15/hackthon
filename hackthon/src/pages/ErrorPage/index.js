@@ -7,6 +7,7 @@ export default function ErrorPage(){
 
     return(
         <Result
+            className="mainContent"
             status="404"
             title="404"
             subTitle="Não achamos a página que você tentou acessar mas, clique abaixo e volte a nossa página inicial!"
