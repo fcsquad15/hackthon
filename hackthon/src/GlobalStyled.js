@@ -6,6 +6,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     width: 100vw;
     height: 100%;
+    background-color: #FBF9F7;
     margin: 0;
     padding: 0;
     font-family: Open-Sans, Helvetica, Sans-Serif;
