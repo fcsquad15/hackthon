@@ -8,22 +8,14 @@ export const MainContainer = styled.main`
     grid-template-rows: 20vh 1fr;
     grid-template-areas: 
         "topHeader topHeader topHeader"
-        "sideMenu mainContent rightContent";
+        "mainContent mainContent mainContent";
 
     .header{
         grid-area: topHeader;
     }
 
-    .sideMenu{
-        grid-area: sideMenu;
-    }
-
     .mainContent{
         grid-area: mainContent;
-    }
-
-    .rightContent{
-        grid-area: rightContent;
     }
 
 `
