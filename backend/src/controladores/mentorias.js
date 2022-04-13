@@ -1,10 +1,8 @@
-const { query } = require('express');
 const conexao = require('../conexao');
 
-//TESTADO E RODANDO
 const disponibilizarHorario = async (req, res) => {
-    // const {id:usuario_id} = req.usuario
-    // const {dia,hora_id}=req.body
+    // const { id: usuario_id } = req.usuario
+    // const { dia, hora_id } = req.body
     const { usuario_id, dia, hora_id } = req.body
 
     if (!usuario_id || !dia || !hora_id) {
@@ -37,7 +35,6 @@ const disponibilizarHorario = async (req, res) => {
     }
 }
 
-//TESTADO E RODANDO
 const listarMentores = async (req, res) => {
     try {
         const mentores = await conexao.query('SELECT usuarios.id,usuarios.nome,usuarios.bio, usuarios.avatar FROM agenda LEFT JOIN usuarios ON agenda.usuario_id = usuarios.id GROUP BY usuarios.id');
@@ -46,14 +43,12 @@ const listarMentores = async (req, res) => {
             return res.status(400).json('Não foi possível listar as mentorias')
         }
 
-        res.status(201).json(mentores.rows)
+        res.status(200).json(mentores.rows)
     } catch (error) {
-        console.log(error)
-        return res.status(400).json(error.mensage)
+        return res.status(400).json(error)
     }
 }
 
-//TESTADO E RODANDO
 const filtrarMentorTema = async (req, res) => {
     const { habilidade } = req.query
 
@@ -70,12 +65,10 @@ const filtrarMentorTema = async (req, res) => {
 
         res.status(201).json(mentores.rows)
     } catch (error) {
-        console.log(error)
-        return res.status(400).json(error.mensage)
+        return res.status(400).json(error)
     }
 }
 
-//FAZER
 const filtrarMentorArea = async (req, res) => {
     const { area } = req.query
 
@@ -92,13 +85,10 @@ const filtrarMentorArea = async (req, res) => {
 
         res.status(201).json(mentores.rows)
     } catch (error) {
-        console.log(error)
-        return res.status(400).json(error.mensage)
+        return res.status(400).json(error)
     }
 }
 
-
-//TESTADO E RODANDO
 const listarDias = async (req, res) => {
     const { mentor } = req.query
 
@@ -121,12 +111,10 @@ const listarDias = async (req, res) => {
 
         res.status(200).json(dias.rows)
     } catch (error) {
-        console.log(error)
-        return res.status(400).json(error.mensage)
+        return res.status(400).json(error)
     }
 }
 
-//TESTADO E RODANDO
 const listarDiasEHora = async (req, res) => {
     const { mentor } = req.query
 
@@ -149,18 +137,16 @@ const listarDiasEHora = async (req, res) => {
 
         res.status(200).json(dias.rows)
     } catch (error) {
-        console.log(error)
-        return res.status(400).json(error.mensage)
+        return res.status(400).json(error)
     }
 }
 
-//TESTADO E RODANDO
 const listarHorarios = async (req, res) => {
     const { mentor } = req.query
     const { dia } = req.body
 
     if (!mentor || !dia) {
-        return res.status(404).json({ "mensagem": 'É necessário informar o id do mentor' })
+        return res.status(404).json({ "mensagem": 'É necessário informar o id do mentor e o dia' })
     }
 
     try {
@@ -170,7 +156,7 @@ const listarHorarios = async (req, res) => {
             return res.status(400).json({ "mensagem": "Mentor não encontrado" });
         }
 
-        const horarios = await conexao.query('SELECT  agenda.id AS agenda_id, horarios.id AS horario_id,horarios.hora FROM agenda LEFT JOIN horarios ON horarios.id=agenda.hora_id WHERE agenda.usuario_id =$1 AND agenda.dia=$2', [mentor, dia]);
+        const horarios = await conexao.query('SELECT  agenda.id AS agenda_id, horarios.id AS horario_id,horarios.hora FROM agenda LEFT JOIN horarios ON horarios.id=agenda.hora_id WHERE agenda.usuario_id =$1 AND agenda.dia=$2 ORDER BY horarios.hora', [mentor, dia]);
 
         if (horarios.rowCount === 0) {
             return res.status(400).json({ "mensagem": 'Nenhum dia disponível' })
@@ -178,14 +164,11 @@ const listarHorarios = async (req, res) => {
 
         res.status(200).json(horarios.rows)
     } catch (error) {
-        console.log(error)
-        return res.status(400).json(error.mensage)
+        return res.status(400).json(error)
     }
     return res.status(200).json()
 }
 
-
-//TESTADO
 const marcarMentoria = async (req, res) => {
     // const { usuario_id } = req.usuario // para usar com Autenticaçaõ
     // const { agenda_id } = req.body;
@@ -196,10 +179,10 @@ const marcarMentoria = async (req, res) => {
     }
 
     try {
-        const { mentoriaDisponivel } = await conexao.query('SELECT * FROM agenda WHERE id=$1 AND disponivel=true', [agenda_id])
+        const mentoriaDisponivel = await conexao.query('SELECT * FROM agenda WHERE id=$1 AND disponivel=true', [agenda_id])
 
         if (mentoriaDisponivel.rowCount === 0) {
-            return res.status(400).json({ 'mensagem': 'Não foi possível marcar a mentoria' })
+            return res.status(400).json({ 'mensagem': 'Horário Indisponível' })
         }
 
         const novaMentoria = await conexao.query('INSERT INTO mentorias (usuario_mentorado_id,agenda_id) VALUES ($1,$2)', [usuario_id, agenda_id]);
@@ -208,9 +191,9 @@ const marcarMentoria = async (req, res) => {
             return res.status(400).json({ 'mensagem': 'Não foi possível agendar sua mentoria' })
         }
 
-        const { rowCount: mentoriaMarcada } = await conexao.query('UPDATE agenda SET disponivel=false WHERE id=$1', [agenda_id]);
+        const mentoriaMarcada = await conexao.query('UPDATE agenda SET disponivel=false WHERE id=$1', [agenda_id]);
 
-        if (mentoriaMarcada === 0) {
+        if (mentoriaMarcada.rowCount === 0) {
             return res.status(400).json({ 'mensagem': 'Não foi possível agendar sua mentoria' })
         }
 
@@ -241,12 +224,10 @@ const marcarMentoria = async (req, res) => {
         return res.status(200).json({ 'mensagem': 'Mentoria marcada com sucesso' })
 
     } catch (error) {
-        console.log(error)
         return res.status(400).json(error)
     }
 }
 
-//Fazer
 const listarMentoriasMarcadas = async (req, res) => {
     // para usar com Autenticação
     // const { id: usuario_id } = req.usuario
@@ -257,7 +238,10 @@ const listarMentoriasMarcadas = async (req, res) => {
     }
 
     try {
-        const mentorias = await conexao.query('SELECT mentorias.id,agenda.dia,horarios.hora FROM mentorias    LEFT JOIN agenda ON mentorias.agenda_id=agenda.id    LEFT JOIN horarios ON agenda.hora_id=horarios.id    WHERE mentorias.usuario_mentorado_id=$1 AND agenda.dia<CURRENT_DATE ORDER BY agenda.dia,horarios.hora', [usuario_id])
+        const mentorias = await conexao.query('SELECT mentorias.id,agenda.dia,horarios.hora FROM mentorias    LEFT JOIN agenda ON mentorias.agenda_id=agenda.id    LEFT JOIN horarios ON agenda.hora_id=horarios.id    WHERE mentorias.usuario_mentorado_id=$1 ORDER BY agenda.dia,horarios.hora', [usuario_id])
+
+        // Caso queira colocar o filtro pelo dia
+        // const mentorias = await conexao.query('SELECT mentorias.id,agenda.dia,horarios.hora FROM mentorias    LEFT JOIN agenda ON mentorias.agenda_id=agenda.id    LEFT JOIN horarios ON agenda.hora_id=horarios.id    WHERE mentorias.usuario_mentorado_id=$1 AND agenda.dia>CURRENT_DATE ORDER BY agenda.dia,horarios.hora', [usuario_id])
 
         if (mentorias.rowCount === 0) {
             res.status(400).json({ 'mensagem': 'Nenhuma mentoria marcada' })
@@ -265,7 +249,6 @@ const listarMentoriasMarcadas = async (req, res) => {
 
         return res.status(200).json(mentorias.rows)
     } catch (error) {
-        console.log(error)
         return res.status(400).json(error)
     }
 }

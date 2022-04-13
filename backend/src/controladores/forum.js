@@ -18,14 +18,11 @@ const criarPergunta = async (req, res) => {
 
         const mensagem = "Pergunta criada com sucesso."
 
-        try {
-            const novaNotificacao = await conexao.query('INSERT INTO notificao (usuario_id,mensagem VALUES ($1,$2)', [usuario_id, mensagem])
 
-            if (novaNotificacao.rowCount === 0) {
-                return res.status(400).json({ 'mensagem': 'Não foi possível criar a notificação.' })
-            }
-        } catch (error) {
-            return res.status(500).json(error)
+        const novaNotificacao = await conexao.query('INSERT INTO notificao (usuario_id,mensagem) VALUES ($1,$2)', [usuario_id, mensagem])
+
+        if (novaNotificacao.rowCount === 0) {
+            return res.status(400).json({ 'mensagem': 'Não foi possível criar a notificação.' })
         }
 
         res.status(201).json({ 'mensagem': 'Post cadastrado' })
@@ -57,19 +54,16 @@ const comentarPergunta = async (req, res) => {
 
         const mensagem = `O usuário ${buscarUsuario[0].nome} comentou na sua pergunta!`
 
-        try {
-            const novaNotificacao = await conexao.query('INSERT INTO notificao (usuario_id,mensagem VALUES ($1,$2)', [usuario_id, mensagem])
 
-            if (novaNotificacao.rowCount === 0) {
-                return res.status(400).json({ 'mensagem': 'Não foi possível criar a notificação.' })
-            }
-        } catch (error) {
-            return res.status(500).json(error)
+        const novaNotificacao = await conexao.query('INSERT INTO notificao (usuario_id,mensagem) VALUES ($1,$2)', [usuario_id, mensagem])
+
+        if (novaNotificacao.rowCount === 0) {
+            return res.status(400).json({ 'mensagem': 'Não foi possível criar a notificação.' })
         }
+
 
         res.status(201).json({ 'mensagem': 'Comentário cadastrado' })
     } catch (error) {
-        console.log(error)
         return res.status(400).json(error)
     }
 }
@@ -83,7 +77,7 @@ const listarPerguntas = async (req, res) => {
             return res.status(400).json('Não foi possível encontrar perguntas')
         }
 
-        res.status(200).send(perguntas.rows);
+        res.status(200).json(perguntas.rows);
     } catch (error) {
         console.log(error)
         return res.status(400).json(error)
@@ -100,7 +94,7 @@ const listarPerguntasFiltroHabilidade = async (req, res) => {
             return res.status(400).json('Não foi possível encontrar perguntas')
         }
 
-        res.status(200).send(perguntas.rows);
+        res.status(200).json(perguntas.rows);
     } catch (error) {
         console.log(error)
         return res.status(400).json(error)
@@ -117,7 +111,7 @@ const listarComentarios = async (req, res) => {
             return res.status(400).json('Não foi possível encontrar comentarios')
         }
 
-        res.status(200).send(comentarios.rows);
+        res.status(200).json(comentarios.rows);
     } catch (error) {
         console.log(error)
         return res.status(400).json(error)

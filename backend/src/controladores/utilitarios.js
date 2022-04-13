@@ -17,7 +17,6 @@ const cadastrarHabilidade = async (req, res) => {
 
         res.status(201).json({ 'mensagem': 'Habilidade Cadastrada' })
     } catch (error) {
-        console.log(error)
         return res.status(400).json(error)
     }
 }
@@ -25,7 +24,7 @@ const cadastrarHabilidade = async (req, res) => {
 //TESTADO E RODANDO
 const listarHabilidade = async (req, res) => {
     try {
-        const habilidades = await conexao.query('SELECT * FROM habilidades');
+        const habilidades = await conexao.query('SELECT * FROM habilidades ORDER BY habilidade');
 
         if (habilidades.rowCount === 0) {
             return res.status(400).json({ "mensagem": 'Não foi possível listar as habilidades.' })
@@ -33,7 +32,6 @@ const listarHabilidade = async (req, res) => {
 
         res.status(201).json(habilidades.rows)
     } catch (error) {
-        console.log(error)
         return res.status(400).json(error)
     }
 }
@@ -55,7 +53,6 @@ const cadastrarHorario = async (req, res) => {
 
         res.status(201).json({ 'mensagem': 'Hora Cadastrada' })
     } catch (error) {
-        console.log(error)
         return res.status(400).json(error)
     }
 }
@@ -77,12 +74,38 @@ const listarHorario = async (req, res) => {
 
 //FAZER - MAIOR PRIORIDADE
 const listarAreas = async (req, res) => {
+    try {
+        const areas = await conexao.query('SELECT * FROM area ORDER BY area');
 
+        if (areas.rowCount === 0) {
+            return res.status(400).json({ "mensagem": 'Nenhum área foi encontrada' })
+        }
+
+        res.status(201).json(areas.rows)
+    } catch (error) {
+        return res.status(400).json(error)
+    }
 }
 
 //FAZER
 const cadastrarAreas = async (req, res) => {
+    const { area } = req.body;
 
+    if (!area) {
+        return res.status(404).json({ 'mensagem': 'Obrigatório informar a nova área.' })
+    }
+
+    try {
+        const novaArea = await conexao.query('INSERT INTO area (area) VALUES ( $1 )', [area]);
+
+        if (novaArea.rowCount === 0) {
+            return res.status(400).json({ 'mensagem': 'Não foi possível inserir a nova área.' })
+        }
+
+        res.status(201).json({ 'mensagem': 'Área Cadastrada' })
+    } catch (error) {
+        return res.status(400).json(error)
+    }
 }
 
 
