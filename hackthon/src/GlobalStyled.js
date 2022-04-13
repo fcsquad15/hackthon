@@ -5,10 +5,10 @@ import 'antd/dist/antd.css';
 const GlobalStyle = createGlobalStyle`
   body {
     width: 100vw;
-    height: 100%;
-    background-color: #FBF9F7;
+    height: 100vh;
     margin: 0;
     padding: 0;
+    outline: none;
     font-family: Open-Sans, Helvetica, Sans-Serif;
   }
 `;
