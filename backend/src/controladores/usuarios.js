@@ -3,9 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const segredo = require('../segredo');
 
-//TESTADO E RODANDO
 const listarUsuarios = async (req, res) => {
-
     try {
         const usuarios = await conexao.query('SELECT id,nome,email,bio,avatar FROM usuarios ORDER BY nome');
 
@@ -13,15 +11,19 @@ const listarUsuarios = async (req, res) => {
             return res.status(400).json({ "mensagem": 'Não foi possível encontrar usuários' })
         }
 
-        res.status(200).send(usuarios.rows);
+        res.status(200).json(usuarios.rows);
     } catch (error) {
         return res.status(400).json(error)
     }
 };
 
-//TESTADO E RODANDO
 const obterUsuario = async (req, res) => {
     const { id } = req.params;
+
+    if (!id) {
+        return res.status(400).json({ 'mensagem': 'Id não informado' })
+    }
+
     try {
         const usuario = await conexao.query('SELECT id,nome,email,bio,avatar FROM usuarios WHERE id = $1', [id]);
 
@@ -29,13 +31,12 @@ const obterUsuario = async (req, res) => {
             return res.status(400).json('Não foi possível encontrar o usuário')
         }
 
-        res.status(200).send(usuario.rows[0]);
+        res.status(200).json(usuario.rows[0]);
     } catch (error) {
         return res.status(400).json(error)
     }
 }
 
-//TESTADO E RODANDO
 const addHabilidadeUsuario = async (req, res) => {
     // const { id: usuario_id } = req.usuario // para usar com Autenticaçaõ
     // const { habilidade_id } = req.body;
@@ -71,10 +72,8 @@ const addHabilidadeUsuario = async (req, res) => {
     } catch (error) {
         return res.status(400).json(error)
     }
-
 }
 
-//TESTADO E RODANDO
 const listarHabilidadesUsuario = async (req, res) => {
     const { id } = req.params;
 
@@ -88,13 +87,7 @@ const listarHabilidadesUsuario = async (req, res) => {
         if (habilidadesUsuario.rowCount === 0) {
             return res.status(400).json({ "mensagem": 'Não foi possível encontrar usuários' })
         }
-        // const habilidadeUsuarioLista = []
-
-        // habilidadesUsuario.rows.forEach((habilidade) => habilidadeUsuarioLista.push(habilidade))
-        // res.status(200).send({ "habilidades": habilidadeUsuarioLista });
-
-        res.status(200).send(habilidadesUsuario.rows);
-
+        res.status(200).json(habilidadesUsuario.rows);
     } catch (error) {
         res.status(400).json(error)
     }
@@ -105,15 +98,61 @@ const listarHabilidadesUsuario = async (req, res) => {
 //FAZER (tabela area colunas id, area
 //  tabela areausuarios colunas id, usuario_id, area_is )
 const addAreaUsuario = async (req, res) => {
+    const { id: usuario_id } = req.usuario // para usar com Autenticaçaõ
+    const { area_id } = req.body;
+    // const { usuario_id, area_id } = req.body;
 
+    if (!usuario_id || !area_id) {
+        return res.status(404).json({ "mensagem": 'Dados obrigatórios não informados.' })
+    }
+
+    try {
+        const { rowCount: buscarUsuario } = await conexao.query('SELECT * FROM usuarios WHERE id = $1', [usuario_id]);
+
+        if (buscarUsuario === 0) {
+            return res.status(400).json({ "mensagem": "Usuário não encontrado" });
+        }
+
+        const { rowCount: areaExistente } = await conexao.query('SELECT * FROM areausuarios WHERE usuario_id=$1 AND area_id=$2', [usuario_id, area_id])
+
+        if (areaExistente > 0) {
+            return res.status(400).json({ "mensagem": "Área já cadastrada" })
+        }
+
+        const novaArea = await conexao.query('INSERT INTO areausuarios (usuario_id,area_id) VALUES ( $1, $2)',
+            [usuario_id, area_id]);
+
+        if (novaArea.rowCount === 0) {
+            return res.status(400).json({ "mensagem": 'Não foi possível inserir a nova área.' })
+        }
+
+        res.status(201).json({ 'mensagem': 'Área inserida com sucesso' })
+    } catch (error) {
+        return res.status(400).json(error)
+    }
 }
 
-//FAZER
 const listarAreaUsuario = async (req, res) => {
+    const { id } = req.params;
 
+    if (!id) {
+        return res.status(404).json({ "mensagem": 'Dados obrigatórios não informados.' })
+    }
+
+    try {
+        const areaUsuario = await conexao.query('SELECT area.id, area.area        FROM areausuarios        LEFT JOIN usuarios ON usuarios.id= areausuarios.usuario_id        LEFT JOIN area ON area.id = areausuarios.area_id  WHERE usuarios.id=$1     ', [id]);
+
+        if (areaUsuario.rowCount === 0) {
+            return res.status(400).json({ "mensagem": 'Não foi possível encontrar usuários' })
+        }
+        res.status(200).json(areaUsuario.rows);
+    } catch (error) {
+        res.status(400).json(error)
+    }
+
+    return res.status(200).json()
 }
 
-//TESTADO E RODANDO
 const login = async (req, res) => {
     const { email, senha } = req.body;
 
@@ -145,11 +184,10 @@ const login = async (req, res) => {
     }
 }
 
-//TESTADO E RODANDO
 const cadastrarUsuario = async (req, res) => {
     const { nome, email, senha, bio, avatar, area } = req.body;
 
-    if (!nome || !email || !senha || !area) {
+    if (!nome || !email || !senha) {
         return res.status(404).json({ "mensagem": 'Dados obrigatórios não informados.' })
     }
 
@@ -176,9 +214,9 @@ const cadastrarUsuario = async (req, res) => {
     }
 }
 
-//TESTADO ALTERADO E RODANDO
 const atualizarUsuario = async (req, res) => {
-    // const { id } = req.usuario; Para usar com autenticação
+    //  Para usar com autenticação
+    // const { id } = req.usuario;
     const { id } = req.params;
     const { nome, email, senha, bio, avatar } = req.body;
 
@@ -212,9 +250,10 @@ const atualizarUsuario = async (req, res) => {
 }
 
 const deletarUsuario = async (req, res) => {
-    // const { id } = req.usuario; Para usar com autenticação
+    // Para usar com autenticação
+    const { id } = req.usuario;
 
-    const { id } = req.params;
+    // const { id } = req.params;
     try {
         const usuario = await conexao.query('DELETE FROM usuarios WHERE id = $1', [id]);
 

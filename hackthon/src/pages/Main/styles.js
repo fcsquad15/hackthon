@@ -2,13 +2,18 @@ import styled from "styled-components";
 
 export const MainContainer = styled.main`
 
-    width: 80vw;
+    width: 100vw;
     display: grid;
-    grid-template-columns: 1fr 2fr 2fr;
-    grid-template-rows: 20vh 1fr;
+    justify-content: center;
+    grid-template-columns: 5vw 1fr 2fr 2fr 5vw;
+    grid-template-rows: 12vh 1fr;
     grid-template-areas: 
-        "topHeader topHeader topHeader"
-        "mainContent mainContent mainContent";
+        "Lblank topHeader topHeader topHeader Rblank"
+        "Lblank mainContent mainContent mainContent Rblank";
+
+    .Lblank{
+        grid-area: Lblank;
+    }
 
     .header{
         grid-area: topHeader;
@@ -18,4 +23,7 @@ export const MainContainer = styled.main`
         grid-area: mainContent;
     }
 
+    .Rblank{
+        grid-area: Rblank;
+    }
 `
