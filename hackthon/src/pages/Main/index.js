@@ -4,6 +4,7 @@ import GlobalStyle from '../../GlobalStyled'
 import { MainContainer } from './styles'
 
 import Header from '../../components/Header'
+import ErrorPage from '../ErrorPage';
 
 import { BrowserRouter } from 'react-router-dom';
 import Router from '../../Routes';
