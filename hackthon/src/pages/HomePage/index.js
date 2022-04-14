@@ -1,6 +1,7 @@
 import React from "react";
 
 import girl from '../../images/girl.svg'
+import girl2 from '../../images/girl2.svg'
 
 import { 
 
@@ -10,6 +11,8 @@ import {
     BottomContainer,
     SecondaryTextConytainer,
     MainTextContainer,
+    DoughtButton,
+    MenthorButton,
     ImgContainer
 } from './styles'
 
@@ -18,7 +21,7 @@ export default function HomePage(){
     return(
         <HomePageContainer className="mainContent">
             <GreenContentContainer>
-                
+
                 <LeftStatementsContainer>
                 <MainTextContainer>
                     <h1>Technical Share</h1>
@@ -34,8 +37,15 @@ export default function HomePage(){
 
             </GreenContentContainer>
             <BottomContainer>
-
+                <MenthorButton>
+                    <p>Marcar Mentoria</p>
+                </MenthorButton>
+                <DoughtButton>
+                <p>tirar dúvida</p>
+                </DoughtButton>
             </BottomContainer>
+
+            <img src={girl2} alt='Technical Share' className="BottomImage"/>
         </HomePageContainer>
     )
 }

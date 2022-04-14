@@ -9,7 +9,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     outline: none;
-    font-family: Open-Sans, Helvetica, Sans-Serif;
+    font-family: 'Montserrat', sans-serif;
   }
 `;
  
