@@ -5,6 +5,13 @@ export const HomePageContainer = styled.div`
     width: 100%;
     height: 92vh;
     background-color: violet;
+
+    .BottomImage{
+        float: left;
+        position: relative;
+        top: -30vh;
+        left: 5vw;
+    }
 `
 
 export const GreenContentContainer = styled.div`
@@ -47,5 +54,40 @@ export const ImgContainer = styled.div`
 export const BottomContainer = styled.div`
 
     width: 100%;
-    background-color: floralwhite;
+    background-color: goldenrod;
+    display: flex;
+    flex-flow: column wrap;
+    align-content: flex-end;
+`
+
+export const MenthorButton = styled.div`
+
+    width: 25%;
+    height: 8vh;
+    display: flex;
+    background-color: #E8505B;
+    border-radius: 30px;
+    justify-content: center;
+    align-items: center;
+
+    p{
+        text-align: center;
+        color: #FFF;
+    }
+`
+
+export const DoughtButton = styled.div`
+
+    width: 25%;
+    height: 8vh;
+    display: flex;
+    background-color: #E8505B;
+    border-radius: 30px;
+    justify-content: center;
+    align-items: center;
+
+    p{
+        text-align: center;
+        color: #FFF;
+    }
 `
