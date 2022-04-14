@@ -6,7 +6,7 @@ export const MainContainer = styled.main`
     display: grid;
     justify-content: center;
     grid-template-columns: 5vw 1fr 2fr 2fr 5vw;
-    grid-template-rows: 12vh 1fr;
+    grid-template-rows: 8vh 1fr;
     grid-template-areas: 
         "Lblank topHeader topHeader topHeader Rblank"
         "Lblank mainContent mainContent mainContent Rblank";
