@@ -1,6 +1,5 @@
 const conexao = require('../conexao')
 
-//TESTADO E RODANDO
 const cadastrarHabilidade = async (req, res) => {
     const { habilidade } = req.body;
 
@@ -9,6 +8,12 @@ const cadastrarHabilidade = async (req, res) => {
     }
 
     try {
+        const habilidadeExistente = await conexao.query('SELECT * FROM habilidades WHERE habilidade=$1', [habilidade]);
+
+        if (habilidadeExistente.rowCount > 0) {
+            return res.status(400).json({ 'mensagem': 'Habilidade já cadastrada' })
+        }
+
         const novaHabilidade = await conexao.query('INSERT INTO habilidades (habilidade) VALUES ( $1 )', [habilidade]);
 
         if (novaHabilidade.rowCount === 0) {
@@ -21,7 +26,6 @@ const cadastrarHabilidade = async (req, res) => {
     }
 }
 
-//TESTADO E RODANDO
 const listarHabilidade = async (req, res) => {
     try {
         const habilidades = await conexao.query('SELECT * FROM habilidades ORDER BY habilidade');
@@ -30,13 +34,12 @@ const listarHabilidade = async (req, res) => {
             return res.status(400).json({ "mensagem": 'Não foi possível listar as habilidades.' })
         }
 
-        res.status(201).json(habilidades.rows)
+        res.status(200).json(habilidades.rows)
     } catch (error) {
         return res.status(400).json(error)
     }
 }
 
-//TESTADO E RODANDO
 const cadastrarHorario = async (req, res) => {
     const { hora } = req.body;
 
@@ -45,6 +48,12 @@ const cadastrarHorario = async (req, res) => {
     }
 
     try {
+        const horaExistente = await conexao.query('SELECT * FROM horarios WHERE hora= $1', [hora]);
+
+        if (horaExistente.rowCount !== 0) {
+            return res.status(400).json({ 'mensagem': 'Horário já cadastrado' })
+        }
+
         const novaHabilidade = await conexao.query('INSERT INTO horarios (hora) VALUES ( $1 )', [hora]);
 
         if (novaHabilidade.rowCount === 0) {
@@ -57,7 +66,6 @@ const cadastrarHorario = async (req, res) => {
     }
 }
 
-//TESTADO E RODANDO
 const listarHorario = async (req, res) => {
     try {
         const horarios = await conexao.query('SELECT * FROM horarios ORDER BY hora');
@@ -66,13 +74,12 @@ const listarHorario = async (req, res) => {
             return res.status(400).json({ "mensagem": 'Nenhum horários encontrado' })
         }
 
-        res.status(201).json(horarios.rows)
+        res.status(200).json(horarios.rows)
     } catch (error) {
         return res.status(400).json(error)
     }
 }
 
-//FAZER - MAIOR PRIORIDADE
 const listarAreas = async (req, res) => {
     try {
         const areas = await conexao.query('SELECT * FROM area ORDER BY area');
@@ -81,21 +88,26 @@ const listarAreas = async (req, res) => {
             return res.status(400).json({ "mensagem": 'Nenhum área foi encontrada' })
         }
 
-        res.status(201).json(areas.rows)
+        res.status(200).json(areas.rows)
     } catch (error) {
         return res.status(400).json(error)
     }
 }
 
-//FAZER
 const cadastrarAreas = async (req, res) => {
     const { area } = req.body;
 
     if (!area) {
-        return res.status(404).json({ 'mensagem': 'Obrigatório informar a nova área.' })
+        return res.status(400).json({ 'mensagem': 'Obrigatório informar a nova área.' })
     }
 
     try {
+        const areaExistente = await conexao.query('SELECT * FROM area WHERE area=$1', [area]);
+
+        if (areaExistente.rowCount !== 0) {
+            return res.status(400).json({ 'mensagem': 'Área já cadastrada.' })
+        }
+
         const novaArea = await conexao.query('INSERT INTO area (area) VALUES ( $1 )', [area]);
 
         if (novaArea.rowCount === 0) {
