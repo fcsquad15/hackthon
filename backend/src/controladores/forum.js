@@ -1,11 +1,10 @@
 const conexao = require('../conexao');
 
-
 const criarPergunta = async (req, res) => {
     const { usuario_id, pergunta, habilidade_id } = req.body;
 
     if (!pergunta) {
-        return res.status(404).json('Dados obrigatórios não informados.')
+        return res.status(400).json({ "mensagem": 'Dados obrigatórios não informados.' })
     }
 
     try {
@@ -18,8 +17,7 @@ const criarPergunta = async (req, res) => {
 
         const mensagem = "Pergunta criada com sucesso."
 
-
-        const novaNotificacao = await conexao.query('INSERT INTO notificao (usuario_id,mensagem) VALUES ($1,$2)', [usuario_id, mensagem])
+        const novaNotificacao = await conexao.query('INSERT INTO notificacao (usuario_id,mensagem) VALUES ($1,$2)', [usuario_id, mensagem])
 
         if (novaNotificacao.rowCount === 0) {
             return res.status(400).json({ 'mensagem': 'Não foi possível criar a notificação.' })
@@ -27,18 +25,16 @@ const criarPergunta = async (req, res) => {
 
         res.status(201).json({ 'mensagem': 'Post cadastrado' })
     } catch (error) {
-        console.log(error)
         return res.status(400).json(error)
     }
 }
 
 const comentarPergunta = async (req, res) => {
-
     let { postagem_id } = req.params;
     const { usuario_id, comentario } = req.body;
 
     if (!comentario) {
-        return res.status(404).json('Dados obrigatórios não informados.')
+        return res.status(400).json({ "mensagem": 'Dados obrigatórios não informados.' })
     }
 
     try {
@@ -46,21 +42,28 @@ const comentarPergunta = async (req, res) => {
             [usuario_id, postagem_id, comentario]);
 
         if (novoComentario.rowCount === 0) {
-            return res.status(400).json('Não foi possível inserir o comentário')
+            return res.status(400).json({ "mensagem": 'Não foi possível inserir o comentário' })
         }
 
-        const { rows: buscarUsuario } = await conexao.query('SELECT * FROM usuarios WHERE id = $1', [usuario_id]);
+        const buscarUsuario = await conexao.query('SELECT * FROM usuarios WHERE id = $1', [usuario_id]);
 
+        if (buscarUsuario.rowCount === 0) {
+            return res.status(400).json({ "mensagem": 'Não foi possível buscar o nome do usuário.' })
+        }
 
-        const mensagem = `O usuário ${buscarUsuario[0].nome} comentou na sua pergunta!`
+        const mensagem = `O usuário ${buscarUsuario.rows[0].nome} comentou na sua pergunta!`
 
+        const usuarioDuvida = await conexao.query('SELECT * FROM postagem WHERE id=$1', [postagem_id])
 
-        const novaNotificacao = await conexao.query('INSERT INTO notificao (usuario_id,mensagem) VALUES ($1,$2)', [usuario_id, mensagem])
+        if (usuarioDuvida.rowCount === 0) {
+            return res.status(400).json({ "mensagem": 'Não foi possível localizar o usuário que realizou a pergunta.' })
+        }
+
+        const novaNotificacao = await conexao.query('INSERT INTO notificacao (usuario_id,mensagem) VALUES ($1,$2)', [usuarioDuvida.rows[0].usuario_id, mensagem])
 
         if (novaNotificacao.rowCount === 0) {
             return res.status(400).json({ 'mensagem': 'Não foi possível criar a notificação.' })
         }
-
 
         res.status(201).json({ 'mensagem': 'Comentário cadastrado' })
     } catch (error) {
@@ -69,17 +72,15 @@ const comentarPergunta = async (req, res) => {
 }
 
 const listarPerguntas = async (req, res) => {
-
     try {
-        const perguntas = await conexao.query('SELECT * FROM postagem');
+        const perguntas = await conexao.query('SELECT * FROM postagem ORDER BY hora_postagem DESC');
 
         if (perguntas.rowCount === 0) {
-            return res.status(400).json('Não foi possível encontrar perguntas')
+            return res.status(400).json({ "mensagem": 'Não foi possível encontrar perguntas' })
         }
 
         res.status(200).json(perguntas.rows);
     } catch (error) {
-        console.log(error)
         return res.status(400).json(error)
     }
 }
@@ -88,15 +89,14 @@ const listarPerguntasFiltroHabilidade = async (req, res) => {
     const { habilidade_id } = req.body
 
     try {
-        const perguntas = await conexao.query('SELECT * FROM postagem WHERE habilidade_id=$1', [habilidade_id]);
+        const perguntas = await conexao.query('SELECT * FROM postagem WHERE habilidade_id=$1 ORDER BY hora_postagem DESC', [habilidade_id]);
 
         if (perguntas.rowCount === 0) {
-            return res.status(400).json('Não foi possível encontrar perguntas')
+            return res.status(400).json({ "mensagem": 'Não foi possível encontrar perguntas' })
         }
 
         res.status(200).json(perguntas.rows);
     } catch (error) {
-        console.log(error)
         return res.status(400).json(error)
     }
 }
@@ -105,15 +105,14 @@ const listarComentarios = async (req, res) => {
     let { postagem_id } = req.params;
 
     try {
-        const comentarios = await conexao.query('SELECT * FROM comentarios WHERE postagem_id = $1', [postagem_id]);
+        const comentarios = await conexao.query('SELECT * FROM comentarios WHERE postagem_id = $1 ORDER BY hora_postagem DESC', [postagem_id]);
 
         if (comentarios.rowCount === 0) {
-            return res.status(400).json('Não foi possível encontrar comentarios')
+            return res.status(400).json({ "mensagem": 'Não foi possível encontrar comentarios' })
         }
 
         res.status(200).json(comentarios.rows);
     } catch (error) {
-        console.log(error)
         return res.status(400).json(error)
     }
 }

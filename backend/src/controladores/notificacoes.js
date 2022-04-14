@@ -1,9 +1,8 @@
 const conexao = require('../conexao');
 
 const listarNotificacoes = async (req, res) => {
-    // const { id } = req.usuario // para usar com Autenticaçaõ
+    // const { id } = req.usuario // para usar com Autenticação
     const { id } = req.body
-
 
     if (!id) {
         return res.status(400).json({ 'mensagem': 'Id não informado' })
@@ -22,10 +21,30 @@ const listarNotificacoes = async (req, res) => {
     }
 }
 
-const visualizarTodasNotificacoes = async (req, res) => {
+const contarNotificacoes = async (req, res) => {
     // const { id } = req.usuario // para usar com Autenticaçaõ
     const { id } = req.body
 
+    if (!id) {
+        return res.status(400).json({ 'mensagem': 'Id não informado' })
+    }
+
+    try {
+        const notificacoes = await conexao.query('SELECT COUNT(*) FROM notificacao WHERE usuario_id=$1 AND lida=false', [id]);
+
+        if (notificacoes.rowCount === 0) {
+            return res.status(400).json({ "mensagem": 'Não foi possível encontrar as notificações' })
+        }
+
+        res.status(200).send(notificacoes.rows[0].count);
+    } catch (error) {
+        return res.status(400).json(error)
+    }
+}
+
+const visualizarTodasNotificacoes = async (req, res) => {
+    // const { id } = req.usuario // para usar com Autenticaçaõ
+    const { id } = req.body
 
     if (!id) {
         return res.status(400).json({ 'mensagem': 'Id não informado' })
@@ -44,7 +63,6 @@ const visualizarTodasNotificacoes = async (req, res) => {
     }
 }
 
-
 module.exports = {
-    listarNotificacoes, visualizarTodasNotificacoes
+    listarNotificacoes, visualizarTodasNotificacoes, contarNotificacoes
 }
