@@ -208,6 +208,7 @@ const marcarMentoria = async (req, res) => {
 
         const mensagemMentor = `Sua mentoria ${dataFormatada} às ${buscarMentor[0].hora} foi agendada por ${buscarMentorado[0].nome} . Você receberá uma notificação 15 minutos antes dela começar e um chat entre vocês será aberto automaticamente.`
 
+
         const notificaoMentorado = await conexao.query('INSERT INTO notificacao (usuario_id,mensagem) VALUES ($1,$2)', [usuario_id, mensagemMentorado])
 
         if (notificaoMentorado.rowCount === 0) {
@@ -220,7 +221,8 @@ const marcarMentoria = async (req, res) => {
             return res.status(400).json({ 'mensagem': 'Não foi possível criar a notificação.' })
         }
 
-        return res.status(201).json({ 'mensagem': 'Mentoria marcada com sucesso' })
+        return res.status(200).json({ 'mensagem': 'Mentoria marcada com sucesso' })
+
     } catch (error) {
         return res.status(400).json(error)
     }
@@ -229,7 +231,7 @@ const marcarMentoria = async (req, res) => {
 const listarMentoriasMarcadas = async (req, res) => {
     // para usar com Autenticação
     // const { id: usuario_id } = req.usuario
-    const { usuario_id } = req.body
+    const { usuario_id } = req.params
 
     if (!usuario_id) {
         return res.status(400).json({ 'mensagem': 'Usuário não informado' })
@@ -244,11 +246,14 @@ const listarMentoriasMarcadas = async (req, res) => {
         if (mentorias.rowCount === 0) {
             res.status(400).json({ 'mensagem': 'Nenhuma mentoria marcada' })
         }
+
         return res.status(200).json(mentorias.rows)
     } catch (error) {
         return res.status(400).json(error)
     }
 }
+
+
 
 module.exports = {
     disponibilizarHorario, listarMentores, filtrarMentorTema, filtrarMentorArea, listarMentoriasMarcadas, listarDias, listarHorarios, marcarMentoria, listarDiasEHora

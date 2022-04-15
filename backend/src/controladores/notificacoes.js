@@ -1,8 +1,9 @@
 const conexao = require('../conexao');
 
 const listarNotificacoes = async (req, res) => {
-    // const { id } = req.usuario // para usar com Autenticação
+    // const { id } = req.usuario // para usar com Autenticaçaõ
     const { id } = req.body
+
 
     if (!id) {
         return res.status(400).json({ 'mensagem': 'Id não informado' })
@@ -25,6 +26,7 @@ const contarNotificacoes = async (req, res) => {
     // const { id } = req.usuario // para usar com Autenticaçaõ
     const { id } = req.body
 
+
     if (!id) {
         return res.status(400).json({ 'mensagem': 'Id não informado' })
     }
@@ -45,6 +47,7 @@ const contarNotificacoes = async (req, res) => {
 const visualizarTodasNotificacoes = async (req, res) => {
     // const { id } = req.usuario // para usar com Autenticaçaõ
     const { id } = req.body
+
 
     if (!id) {
         return res.status(400).json({ 'mensagem': 'Id não informado' })

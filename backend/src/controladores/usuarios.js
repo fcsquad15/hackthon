@@ -43,7 +43,7 @@ const addHabilidadeUsuario = async (req, res) => {
     const { usuario_id, habilidade_id } = req.body;
 
     if (!usuario_id || !habilidade_id) {
-        return res.status(400).json({ "mensagem": 'Dados obrigatórios não informados.' })
+        return res.status(404).json({ "mensagem": 'Dados obrigatórios não informados.' })
     }
 
     try {
@@ -59,13 +59,16 @@ const addHabilidadeUsuario = async (req, res) => {
             return res.status(400).json({ "mensagem": "Habilidade já cadastrada" })
         }
 
-        const novaHabilidade = await conexao.query('INSERT INTO habilidadeusuarios (usuario_id,habilidade_id) VALUES ( $1, $2)', [usuario_id, habilidade_id]);
+        const novaHabilidade = await conexao.query('INSERT INTO habilidadeusuarios (usuario_id,habilidade_id) VALUES ( $1, $2)',
+            [usuario_id, habilidade_id]);
 
         if (novaHabilidade.rowCount === 0) {
             return res.status(400).json({ "mensagem": 'Não foi possível inserir a habilidade' })
         }
 
         res.status(201).json({ 'mensagem': 'Habilidade inserida com sucesso' })
+
+
     } catch (error) {
         return res.status(400).json(error)
     }
@@ -75,7 +78,7 @@ const listarHabilidadesUsuario = async (req, res) => {
     const { id } = req.params;
 
     if (!id) {
-        return res.status(400).json({ "mensagem": 'Dados obrigatórios não informados.' })
+        return res.status(404).json({ "mensagem": 'Dados obrigatórios não informados.' })
     }
 
     try {
@@ -98,7 +101,7 @@ const addAreaUsuario = async (req, res) => {
     const { usuario_id, area_id } = req.body;
 
     if (!usuario_id || !area_id) {
-        return res.status(400).json({ "mensagem": 'Dados obrigatórios não informados.' })
+        return res.status(404).json({ "mensagem": 'Dados obrigatórios não informados.' })
     }
 
     try {
@@ -131,7 +134,7 @@ const listarAreaUsuario = async (req, res) => {
     const { id } = req.params;
 
     if (!id) {
-        return res.status(400).json({ "mensagem": 'Dados obrigatórios não informados.' })
+        return res.status(404).json({ "mensagem": 'Dados obrigatórios não informados.' })
     }
 
     try {
@@ -172,7 +175,8 @@ const login = async (req, res) => {
 
         const token = jwt.sign({ id: usuarioEncontrado.id }, segredo, { expiresIn: '2h' });
 
-        return res.status(201).json(token);
+        return res.status(200).json(token);
+
     } catch (error) {
         return res.status(500).json({ mensagem: 'Ocorreu um erro desconhecido. - ' + error.message });
     }
@@ -182,7 +186,7 @@ const cadastrarUsuario = async (req, res) => {
     const { nome, email, senha, bio, avatar, area } = req.body;
 
     if (!nome || !email || !senha) {
-        return res.status(400).json({ "mensagem": 'Dados obrigatórios não informados.' })
+        return res.status(404).json({ "mensagem": 'Dados obrigatórios não informados.' })
     }
 
     try {
@@ -193,6 +197,7 @@ const cadastrarUsuario = async (req, res) => {
         }
 
         const senhaEncriptada = await bcrypt.hash(String(senha), 10);
+
 
         const novoUsuario = await conexao.query('INSERT INTO usuarios (nome, email, senha, bio, avatar, area) VALUES ( $1, $2, $3, $4, $5, $6 )',
             [nome, email, senhaEncriptada, bio, avatar, area]);
@@ -244,6 +249,7 @@ const atualizarUsuario = async (req, res) => {
 
         res.status(200).json({ 'mensagem': 'Usuário atualizado com sucesso' });
     } catch (error) {
+        console.log(error)
         return res.status(400).json(error);
     }
 }
@@ -251,6 +257,7 @@ const atualizarUsuario = async (req, res) => {
 const deletarUsuario = async (req, res) => {
     // Para usar com autenticação
     // const { id } = req.usuario;
+
     const { id } = req.params;
     try {
         const usuario = await conexao.query('DELETE FROM usuarios WHERE id = $1', [id]);
