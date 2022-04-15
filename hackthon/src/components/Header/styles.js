@@ -41,3 +41,22 @@ img{
   border: 1.5px solid #035757;
 }
 `;
+
+export const BellContainer = styled.div`
+cursor:pointer;
+position: relative;
+`
+
+export const NotificationContainer = styled.div`
+width:30vw;
+position: absolute;
+    top: 50px;
+    right:50px;
+    z-index: 1;
+`
+export const Notification = styled.div`
+  background-color: rgba(232, 240, 240, .8);
+  border-radius: 8px;
+  border-bottom: 1px solid rgba(232, 240, 240, 1);
+  padding:5px;
+`
