@@ -1,10 +1,11 @@
 const conexao = require('../conexao');
 
+
 const criarPergunta = async (req, res) => {
     const { usuario_id, pergunta, habilidade_id } = req.body;
 
     if (!pergunta) {
-        return res.status(400).json({ "mensagem": 'Dados obrigatórios não informados.' })
+        return res.status(404).json({ "mensagem": 'Dados obrigatórios não informados.' })
     }
 
     try {
@@ -65,6 +66,7 @@ const comentarPergunta = async (req, res) => {
             return res.status(400).json({ 'mensagem': 'Não foi possível criar a notificação.' })
         }
 
+
         res.status(201).json({ 'mensagem': 'Comentário cadastrado' })
     } catch (error) {
         return res.status(400).json(error)
@@ -72,8 +74,9 @@ const comentarPergunta = async (req, res) => {
 }
 
 const listarPerguntas = async (req, res) => {
+
     try {
-        const perguntas = await conexao.query('SELECT * FROM postagem ORDER BY hora_postagem DESC');
+        const perguntas = await conexao.query('SELECT postagem.id,postagem.pergunta, usuarios.avatar, usuarios.nome, habilidades.habilidade FROM postagem LEFT JOIN usuarios  ON postagem.usuario_id=usuarios.id LEFT JOIN habilidades ON habilidades.id = postagem.habilidade_id ORDER BY postagem.hora_postagem DESC');
 
         if (perguntas.rowCount === 0) {
             return res.status(400).json({ "mensagem": 'Não foi possível encontrar perguntas' })
@@ -89,7 +92,7 @@ const listarPerguntasFiltroHabilidade = async (req, res) => {
     const { habilidade_id } = req.body
 
     try {
-        const perguntas = await conexao.query('SELECT * FROM postagem WHERE habilidade_id=$1 ORDER BY hora_postagem DESC', [habilidade_id]);
+        const perguntas = await conexao.query('SELECT postagem.id,postagem.pergunta, usuarios.avatar, usuarios.nome, habilidades.habilidade,postagem.hora_postagem FROM postagem LEFT JOIN usuarios  ON postagem.usuario_id=usuarios.id LEFT JOIN habilidades ON habilidades.id = postagem.habilidade_id WHERE postagem.habilidade_id=$1 ORDER BY postagem.hora_postagem DESC', [habilidade_id]);
 
         if (perguntas.rowCount === 0) {
             return res.status(400).json({ "mensagem": 'Não foi possível encontrar perguntas' })
@@ -105,7 +108,7 @@ const listarComentarios = async (req, res) => {
     let { postagem_id } = req.params;
 
     try {
-        const comentarios = await conexao.query('SELECT * FROM comentarios WHERE postagem_id = $1 ORDER BY hora_postagem DESC', [postagem_id]);
+        const comentarios = await conexao.query('SELECT comentarios.id,comentarios.comentario,comentarios.hora_postagem,usuarios.avatar, usuarios.nome FROM comentarios LEFT JOIN usuarios  ON comentarios.usuario_id=usuarios.id WHERE comentarios.postagem_id = $1 ORDER BY comentarios.hora_postagem DESC', [postagem_id]);
 
         if (comentarios.rowCount === 0) {
             return res.status(400).json({ "mensagem": 'Não foi possível encontrar comentarios' })
