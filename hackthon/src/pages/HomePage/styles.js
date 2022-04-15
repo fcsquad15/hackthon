@@ -44,7 +44,7 @@ export const MainTextContainer = styled.div`
 
 export const SecondaryTextConytainer = styled.div`
   width: 50%;
-  height: 60%;
+  height: 40%;
   background-color: #035757;
 `;
 
@@ -60,7 +60,6 @@ export const ImgContainer = styled.div`
 
 export const BottomContainer = styled.div`
   width: 100%;
-  background-color: goldenrod;
   display: flex;
   flex-flow: column wrap;
   align-content: flex-end;

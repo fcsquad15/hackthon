@@ -18,7 +18,6 @@ import {
 } from "./styles";
 
 export default function HomePage() {
-
   const [openModal, setOpenModal] = React.useState(false);
 
   console.log(openModal);
@@ -44,6 +43,7 @@ export default function HomePage() {
               Conectando pessoas
               <p>interessadas pela tecnologia</p>
             </h2>
+            <SecondaryTextConytainer />
           </LeftStatementsContainer>
 
           <ImgContainer>
