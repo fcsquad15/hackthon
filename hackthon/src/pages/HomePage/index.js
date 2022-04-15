@@ -18,6 +18,7 @@ import {
 } from "./styles";
 
 export default function HomePage() {
+
   const [openModal, setOpenModal] = React.useState(false);
 
   console.log(openModal);
