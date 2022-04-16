@@ -25,7 +25,9 @@ export default function Header() {
       </InputContainer>
 
       <BellFilled style={{ fontSize: "1.6rem", color: "#464444" }} />
-      <ProfileContainer>Oie</ProfileContainer>
+      <ProfileContainer>
+        <img src="https://avatars.dicebear.com/api/human/vrtb.svg?mood[]=sad" />
+      </ProfileContainer>
     </HeaderContainer>
   );
 }

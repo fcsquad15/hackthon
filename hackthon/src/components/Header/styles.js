@@ -34,6 +34,7 @@ export const InputContainer = styled.div`
 `;
 
 export const ProfileContainer = styled.div`
-  width: 10%;
-  background-color: dodgerblue;
+  width: 5vh;
+  height: 5vh;
+  border-radius: 50%;
 `;
