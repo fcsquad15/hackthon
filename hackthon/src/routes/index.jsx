@@ -1,6 +1,6 @@
 import { Routes, Route, Outlet, Navigate } from 'react-router-dom';
 
-import HomePage from '../pages/HomePage';
+import HomePage from '../pages/HomePage/index';
 import ForumPage from '../pages/ForumPage';
 import ErrorPage from '../pages/ErrorPage/index';
 

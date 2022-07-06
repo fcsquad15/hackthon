@@ -2,6 +2,7 @@
     width: 100%;
     height: 10rem;
     position: fixed;
+    z-index: 2;
     background-color: #FFFFFF;
     padding: 0px 10rem;
 
@@ -59,6 +60,7 @@
 }
 
 .ForumHeader {
+
     margin: 0px 3rem;
 
     font-weight: 700;
@@ -67,7 +69,9 @@
     letter-spacing: -0.011rem;
 
     color: #5F5E5E;
+    background-color: #FFFFFF;
 
+    border: none;
     cursor: pointer;
 }
 

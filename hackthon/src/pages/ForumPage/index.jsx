@@ -1,31 +1,17 @@
-import React from "react";
+import Lixo from "../../assets/lixo.svg";
+import Plus from "../../assets/plus.svg";
+import Profile from "../../assets/profile-icon-png-898.png";
 import { Get } from "../../services/Conection";
-import Profile from "../../images/profile-icon-png-898.png";
-import Plus from "../../images/plus.svg";
-import Lixo from "../../images/lixo.svg";
+
+import { useEffect, useState } from "react";
 
 import {
-  ForumPageContainer,
-  ForumContainer,
-  InfosContainer,
-  TopContentContainer,
-  MainTextContainer,
-  QuestionButton,
-  BottomContainer,
-  PostContainer,
-  AvatarPostContainer,
-  InfosPostContainer,
-  NamePostContainer,
-  QuestionPostContainer,
-  AnswerPostContainer,
-  MentoriaDate,
-  MentoriaTitle,
-  MentoriaPlus
+  AnswerPostContainer, AvatarPostContainer, BottomContainer, ForumContainer, ForumPageContainer, InfosContainer, InfosPostContainer, MainTextContainer, MentoriaDate, MentoriaPlus, MentoriaTitle, NamePostContainer, PostContainer, QuestionButton, QuestionPostContainer, TopContentContainer
 } from "./styles";
 
 export default function HomePage() {
-  const [posts, setPosts] = React.useState([]);
-  const [mentorias, setMentorias] = React.useState([]);
+  const [posts, setPosts] = useState([]);
+  const [mentorias, setMentorias] = useState([]);
 
   async function loadPost() {
     try {
@@ -46,7 +32,7 @@ export default function HomePage() {
   }
 
 
-  React.useEffect(() => {
+  useEffect(() => {
     loadMentorias()
     loadPost()
   }, [])
@@ -100,7 +86,7 @@ export default function HomePage() {
           {mentorias.map((mentoria) => (
             <MentoriaDate key={mentoria.id}>
               <p>{new Date(mentoria.dia).getDate()}/{new Date(mentoria.dia).getMonth()}</p>
-              <p>{mentoria.hora}<img src={Lixo} /></p>
+              <p>{mentoria.hora}<img src={Lixo} alt="trash" /></p>
             </MentoriaDate>
 
           ))}
