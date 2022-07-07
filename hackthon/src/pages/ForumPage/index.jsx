@@ -3,20 +3,18 @@ import { toast } from "react-toastify";
 
 import Lixo from "../../assets/lixo.svg";
 import Plus from "../../assets/plus.svg";
+import Arrow from "../../assets/arrowBottom.svg";
 import Profile from "../../assets/profile-icon-png-898.png";
 
 import { Get } from "../../services/Conection";
 
-import {
-  AnswerPostContainer, AvatarPostContainer, BottomContainer, ForumContainer,
-  ForumPageContainer, InfosContainer, InfosPostContainer, MainTextContainer, MentoriaDate,
-  MentoriaPlus, MentoriaTitle, NamePostContainer, PostContainer, QuestionButton,
-  QuestionPostContainer, TopContentContainer,
-} from "./styles";
+import "./styles.css";
 
 export default function HomePage() {
   const [posts, setPosts] = useState([]);
   const [mentorias, setMentorias] = useState([]);
+  const [filter, setFilter] = useState("Área");
+  const [openFilter, setOpenFilter] = useState(false);
 
   async function loadPost() {
     try {
@@ -36,74 +34,89 @@ export default function HomePage() {
     }
   }
 
+  function handleFilter() {
+    setOpenFilter(!openFilter);
+  }
+
+  function handleSetFilter(iten) {
+    setOpenFilter(!openFilter);
+    setFilter(iten);
+    const localPosts = posts;
+    if (iten === "Autor") {
+      localPosts.sort((a, b) => (a.nome > b.nome ? 1 : -1));
+    } else if (iten === "Área") {
+      localPosts.sort((a, b) => (a.habilidade > b.habilidade ? 1 : -1));
+    } else {
+      localPosts.sort((a, b) => (a.id > b.id ? -1 : 1));
+    }
+  }
+
   useEffect(() => {
     loadMentorias();
     loadPost();
   }, []);
 
   return (
-    <ForumPageContainer className="mainContent">
-      <ForumContainer>
-        <TopContentContainer>
-          <MainTextContainer>
-            <h1>Você tem alguma dúvida?</h1>
-          </MainTextContainer>
-          <QuestionButton>
-            <p>Faça sua pergunta</p>
-          </QuestionButton>
-        </TopContentContainer>
-        <BottomContainer>
+    <div className="ForumPage">
+      <section className="ForumSection">
+        <article className="ForumQuestion">
+          <h1 className="ForumTitle">Você tem alguma dúvida?</h1>
+          <button type="button" className="NewQuestion">Faça sua pergunta</button>
+        </article>
+        <article className="ForumSpace">
+          <div className="ForumFilter">
+            <span>Ordenar fórum por</span>
+            <span>{filter}</span>
+            <button type="button" onClick={() => handleFilter()}><img src={Arrow} alt="\/" /></button>
+            {openFilter && (
+              <div className="ListFilter">
+                <button type="button" onClick={() => handleSetFilter("Área")}>Área</button>
+                <button type="button" onClick={() => handleSetFilter("Autor")}>Autor</button>
+                <button type="button" onClick={() => handleSetFilter("Data")}>Data</button>
+              </div>
+            )}
+          </div>
           {posts.map((post) => (
-            <PostContainer PostContainer key={post.id}>
-              <AvatarPostContainer>
-                <img src={post.avatar ? post.avatar : Profile} alt="avatar" />
-              </AvatarPostContainer>
-              <InfosPostContainer>
-                <NamePostContainer>
-                  <p>{post.nome}</p>
-                  <span>{post.habilidade}</span>
-                </NamePostContainer>
-                <QuestionPostContainer>
-                  <p>
-                    {post.pergunta}
-                  </p>
-                </QuestionPostContainer>
-                <AnswerPostContainer>
-                  <p>
-                    Responder
-                  </p>
-                </AnswerPostContainer>
-              </InfosPostContainer>
-            </PostContainer>
+            <article className="ForumPost" key={post.id}>
+              <img src={post.avatar ? post.avatar : Profile} alt="avatar" className="AvatarPost" />
+              <div className="PostContent">
+                <h3 className="PostName">{post.nome}</h3>
+                <span className="PostArea">{post.habilidade}</span>
+                <p className="PostQuestion">
+                  {post.pergunta}
+                </p>
+                <button type="button" className="PostBtn">
+                  Responder
+                </button>
+              </div>
+            </article>
           ))}
-        </BottomContainer>
-      </ForumContainer>
-      <InfosContainer>
-        <MentoriaTitle>
+        </article>
+      </section>
+      <section className="Schedule">
+        <h2 className="ScheduleTitle">
           Mentorias Marcadas
-        </MentoriaTitle>
+        </h2>
         {mentorias.map((mentoria) => (
-          <MentoriaDate key={mentoria.id}>
-            <p>
+          <div key={mentoria.id} className="ScheduleIten">
+            <span>
               {new Date(mentoria.dia).getDate()}
               /
               {new Date(mentoria.dia).getMonth()}
-            </p>
-            <p>
-              {mentoria.hora}
-              <img src={Lixo} alt="trash" />
-            </p>
-          </MentoriaDate>
-
+            </span>
+            <span>
+              {mentoria.hora.slice(0, 2)}
+              :
+              {mentoria.hora.slice(3, 5)}
+              <img src={Lixo} alt="trash" className="ScheduleTrash" />
+            </span>
+          </div>
         ))}
-        <MentoriaPlus>
-          <span>
-            Ver mais
-            <img src={Plus} alt="+" />
-          </span>
-        </MentoriaPlus>
-      </InfosContainer>
-
-    </ForumPageContainer>
+        <span className="SchedulePlus">
+          Ver mais
+          <img src={Plus} alt="+" />
+        </span>
+      </section>
+    </div>
   );
 }

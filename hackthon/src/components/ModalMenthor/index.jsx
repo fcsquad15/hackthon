@@ -12,6 +12,7 @@ export default function ModalMenthor({ setOpenModal }) {
   function close() {
     setOpenModal(false);
   }
+
   // eslint-disable-next-line no-unused-vars
   const [area, setArea] = useState([]);
 
