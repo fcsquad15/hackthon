@@ -1,0 +1,63 @@
+.Backdrop {
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: #000;
+  color: #FFFFFF;
+  opacity: 0.8;
+  z-index: 10;
+  text-align: center;
+
+  padding: 10rem;
+}
+
+.TitleContainer {
+  font-style: normal;
+  font-weight: 800;
+  font-size: 4.0rem;
+  line-height: 4.9rem;
+
+  letter-spacing: -0.011rem;
+
+}
+
+.ListArea {
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+
+  overflow-y: auto;
+
+  gap: 0.2rem;
+
+  font-style: normal;
+  font-weight: 500;
+  font-size: 6.4rem;
+  line-height: 7.8rem;
+}
+
+.ListArea::-webkit-scrollbar {
+  width: 1.3rem;
+}
+
+.ListArea::-webkit-scrollbar-track {
+  background: rgb(102, 102, 102);
+  border-radius: 5rem;
+}
+
+.ListArea::-webkit-scrollbar-thumb {
+  background-color: rgb(74, 74, 74);
+  border-radius: 2rem;
+  border: 0.1rem solid rgb(0, 0, 0);
+}
+
+.ItenArea {
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.ItenArea:hover {
+  color: rgba(255, 255, 255);
+}
