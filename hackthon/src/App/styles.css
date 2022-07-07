@@ -6,6 +6,10 @@
     /* font-family: Calibri, sans-serif; */
 }
 
+.openModal {
+    overflow-y: hidden;
+}
+
 .contentPage {
     padding-top: 10rem;
 }

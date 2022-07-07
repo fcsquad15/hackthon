@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import NotificationImportantIcon from "@mui/icons-material/NotificationImportant";
@@ -64,9 +64,9 @@ export default function Header() {
 
   return (
     <section className="Header">
-      <div className="Logo">
+      <button className="Logo" type="button" onClick={() => navigate("/")}>
         Technical Share
-      </div>
+      </button>
       <div className="SearchContainer">
         <img className="IconSearch" src={IconSearch} alt="Search" />
         <input placeholder="Pesquisa" className="HeaderSearch" />

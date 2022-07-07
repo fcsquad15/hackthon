@@ -4,12 +4,11 @@ import { ToastContainer } from "react-toastify";
 import Header from "../components/Header";
 
 import Index from "../routes";
-// import { UserProvider } from ;
+import { UserProvider } from "../contexts/UserContexts";
 
 export default function Main() {
   return (
-    <>
-      {/* <UserProvider> */}
+    <UserProvider>
       <main>
         <ToastContainer theme="light" style={{ width: "36rem", fontSize: "1.6rem" }} />
         <Header />
@@ -17,7 +16,6 @@ export default function Main() {
           <Index />
         </section>
       </main>
-      {/* </UserProvider> */}
-    </>
+    </UserProvider>
   );
 }

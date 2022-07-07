@@ -39,9 +39,9 @@
         "react/jsx-indent": [
             2,
             2,
-            {
-                "checkAttributes": true
-            },
+            // {
+            //     "checkAttributes": false
+            // },
             {
                 "indentLogicalExpressions": true
             }
