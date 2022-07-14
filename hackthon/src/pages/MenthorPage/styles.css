@@ -1,0 +1,70 @@
+.MenthorPage {
+  display: flex;
+  flex-direction: column;
+
+  /* padding: 6rem 10rem 0; */
+}
+
+.TitleMenthor {
+  width: 100%;
+  align-items: center;
+  padding: 3rem;
+
+  background: #035757;
+}
+
+.TitleMenthor h1 {
+  text-align: center;
+
+  font-weight: 500;
+  font-size: 3.6rem;
+
+  letter-spacing: -0.011rem;
+
+  color: #FFFFFF;
+}
+
+
+
+.TitleList {
+  margin: 3rem 10rem ;
+
+  font-family: 'Calibri';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 6.4rem;
+  letter-spacing: -0.011rem;
+  
+  color: #E8505B;
+}
+
+.ListMenthor {
+  padding: 0 10rem;
+
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 1rem;
+}
+
+
+
+@media screen and (max-width:800px) {
+
+  .ForumPage {
+    padding: 2rem;
+  }
+
+  .ForumSection {
+    width: 100%;
+    margin: 0;
+  }
+
+  .AvatarPost {
+    display: none;
+  }
+
+  .Schedule {
+    display: none;
+  }
+}

@@ -10,7 +10,7 @@ import { Get } from "../../services/Conection";
 
 import "./styles.css";
 
-export default function HomePage() {
+export default function ForumPage() {
   const [posts, setPosts] = useState([]);
   const [mentorias, setMentorias] = useState([]);
   const [filter, setFilter] = useState("Área");

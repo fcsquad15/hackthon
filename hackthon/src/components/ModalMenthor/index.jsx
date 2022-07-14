@@ -36,12 +36,16 @@ export default function ModalMenthor({ setOpenModal }) {
         Em qual área você quer receber mentoria?
       </h2>
       <article className="ListArea">
-        {
-          area.map((iten) => (
-            // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-            <span className="ItenArea" key={iten.id} onClick={() => navigate("/forum")}>{iten.habilidade}</span>
-          ))
-        }
+        {area.map((iten) => (
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+          <span
+            className="ItenArea"
+            key={iten.id}
+            onClick={() => navigate(`/mentoria/${iten.id}`)}
+          >
+            {iten.habilidade}
+          </span>
+        ))}
       </article>
     </section>
   );

@@ -36,15 +36,8 @@
             "error",
             "windows"
         ],
-        "react/jsx-indent": [
-            2,
-            2,
-            // {
-            //     "checkAttributes": false
-            // },
-            {
-                "indentLogicalExpressions": true
-            }
-        ]
+        "react/jsx-indent": "off",
+        "indent": "off",
+        "object-curly-newline":"off"
     }
 }
