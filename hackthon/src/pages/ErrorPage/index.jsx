@@ -1,20 +1,13 @@
-import React from "react";
-
-import { Result, Button } from "antd";
-import { Link } from "react-router-dom";
+/* eslint-disable indent */
+/* eslint-disable react/jsx-indent */
+import { useNavigate } from "react-router-dom";
 
 export default function ErrorPage() {
+    const navigate = useNavigate();
     return (
-        <Result
-            className="mainContent"
-            status="404"
-            title="404"
-            subTitle="Não achamos a página que você tentou acessar mas, clique abaixo e volte a nossa página inicial!"
-            extra={(
-                <Button type="primary">
-                    <Link to="/">Página Inicial</Link>
-                </Button>
-            )}
-        />
+        <section>
+            Seu link está errado, clique no botão abaixo para retornar
+            <button type="button" onClick={() => navigate("/")}>Voltar</button>
+        </section>
     );
 }
