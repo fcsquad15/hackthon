@@ -116,7 +116,7 @@ const listarDias = async (req, res) => {
 }
 
 const listarDiasEHora = async (req, res) => {
-    const { mentor } = req.query
+    const { mentor } = req.params
 
     if (!mentor) {
         return res.status(404).json({ "mensagem": 'É necessário informar o id do mentor' })
@@ -253,8 +253,34 @@ const listarMentoriasMarcadas = async (req, res) => {
     }
 }
 
+const obterMentor = async(req,res) => {
+    const { mentor } = req.params
+
+    if (!mentor) {
+        return res.status(404).json({ "mensagem": 'É necessário informar o id do mentor' })
+    }
+
+    try {
+        const usuario = await conexao.query('SELECT id,nome,email,bio,avatar FROM usuarios WHERE id = $1', [mentor]);
+
+        if (usuario.rowCount === 0) {
+            return res.status(400).json('Não foi possível encontrar o usuário')
+        }
+
+        const habilidadesUsuario = await conexao.query('SELECT habilidades.id, habilidades.habilidade        FROM habilidadeusuarios        LEFT JOIN usuarios ON usuarios.id= habilidadeusuarios.usuario_id        LEFT JOIN habilidades ON habilidades.id = habilidadeusuarios.habilidade_id  WHERE usuarios.id=$1     ', [mentor]);
+        
+        const dias = await conexao.query('SELECT agenda.id, agenda.dia, horarios.hora FROM agenda LEFT JOIN horarios ON horarios.id=agenda.hora_id WHERE usuario_id =$1 AND agenda.disponivel=true ORDER BY agenda.dia, horarios.hora', [mentor]);
+        
+        
+        res.status(200).json({mentor:usuario.rows[0],habilidade:habilidadesUsuario.rows,horarios:dias.rows})
+        // res.status(200).json(usuario.rows)
+    } catch (error) {
+        return res.status(400).json(error)
+    }
+}
+
 
 
 module.exports = {
-    disponibilizarHorario, listarMentores, filtrarMentorTema, filtrarMentorArea, listarMentoriasMarcadas, listarDias, listarHorarios, marcarMentoria, listarDiasEHora
+    disponibilizarHorario, listarMentores, filtrarMentorTema, filtrarMentorArea, listarMentoriasMarcadas, listarDias, listarHorarios, marcarMentoria, listarDiasEHora,obterMentor
 }

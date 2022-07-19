@@ -19,7 +19,7 @@ function Index() {
       <Route element={<ProtectedRoutes redirectTo={<ErrorPage />} />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/forum" element={<ForumPage />} />
-        <Route path="/mentoria/:habilidadeId" element={<MenthorPage />} />
+        <Route path="/mentoria/:areaId" element={<MenthorPage />} />
 
         <Route path="*" element={<ErrorPage />} />
       </Route>

@@ -1,5 +1,6 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import useUser from "../../hooks/useUser";
 
 import Lixo from "../../assets/lixo.svg";
 import Plus from "../../assets/plus.svg";
@@ -15,13 +16,15 @@ export default function ForumPage() {
   const [mentorias, setMentorias] = useState([]);
   const [filter, setFilter] = useState("Área");
   const [openFilter, setOpenFilter] = useState(false);
+  const { setOpen, setErrorMessage } = useUser();
 
   async function loadPost() {
     try {
       const response = await Get("/forum");
       setPosts(response.data);
     } catch (error) {
-      toast.error(error.message);
+      setOpen(true);
+      setErrorMessage(error.message);
     }
   }
 
@@ -30,7 +33,8 @@ export default function ForumPage() {
       const response = await Get("/mentorias/marcadas/1");
       setMentorias(response.data);
     } catch (error) {
-      toast.error(error.message);
+      setOpen(true);
+      setErrorMessage(error.message);
     }
   }
 
@@ -61,30 +65,42 @@ export default function ForumPage() {
       <section className="ForumSection">
         <article className="ForumQuestion">
           <h1 className="ForumTitle">Você tem alguma dúvida?</h1>
-          <button type="button" className="NewQuestion">Faça sua pergunta</button>
+          <button type="button" className="NewQuestion">
+            Faça sua pergunta
+          </button>
         </article>
         <article className="ForumSpace">
           <div className="ForumFilter">
             <span>Ordenar fórum por</span>
             <span>{filter}</span>
-            <button type="button" onClick={() => handleFilter()}><img src={Arrow} alt="\/" /></button>
+            <button type="button" onClick={() => handleFilter()}>
+              <img src={Arrow} alt="\/" />
+            </button>
             {openFilter && (
               <div className="ListFilter">
-                <button type="button" onClick={() => handleSetFilter("Área")}>Área</button>
-                <button type="button" onClick={() => handleSetFilter("Autor")}>Autor</button>
-                <button type="button" onClick={() => handleSetFilter("Data")}>Data</button>
+                <button type="button" onClick={() => handleSetFilter("Área")}>
+                  Área
+                </button>
+                <button type="button" onClick={() => handleSetFilter("Autor")}>
+                  Autor
+                </button>
+                <button type="button" onClick={() => handleSetFilter("Data")}>
+                  Data
+                </button>
               </div>
             )}
           </div>
           {posts.map((post) => (
             <article className="ForumPost" key={post.id}>
-              <img src={post.avatar ? post.avatar : Profile} alt="avatar" className="AvatarPost" />
+              <img
+                src={post.avatar ? post.avatar : Profile}
+                alt="avatar"
+                className="AvatarPost"
+              />
               <div className="PostContent">
                 <h3 className="PostName">{post.nome}</h3>
                 <span className="PostArea">{post.habilidade}</span>
-                <p className="PostQuestion">
-                  {post.pergunta}
-                </p>
+                <p className="PostQuestion">{post.pergunta}</p>
                 <button type="button" className="PostBtn">
                   Responder
                 </button>
@@ -94,20 +110,15 @@ export default function ForumPage() {
         </article>
       </section>
       <section className="Schedule">
-        <h2 className="ScheduleTitle">
-          Mentorias Marcadas
-        </h2>
+        <h2 className="ScheduleTitle">Mentorias Marcadas</h2>
         {mentorias.map((mentoria) => (
           <div key={mentoria.id} className="ScheduleIten">
             <span>
-              {new Date(mentoria.dia).getDate()}
-              /
+              {new Date(mentoria.dia).getDate()}/
               {new Date(mentoria.dia).getMonth()}
             </span>
             <span>
-              {mentoria.hora.slice(0, 2)}
-              :
-              {mentoria.hora.slice(3, 5)}
+              {mentoria.hora.slice(0, 2)}:{mentoria.hora.slice(3, 5)}
               <img src={Lixo} alt="trash" className="ScheduleTrash" />
             </span>
           </div>

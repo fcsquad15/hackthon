@@ -55,7 +55,7 @@ rotas.get('/mentorias', mentorias.listarMentores);
 rotas.get('/mentorias/filtroHab', mentorias.filtrarMentorTema); // id da habilidade vai por req.query
 rotas.get('/mentorias/filtroArea', mentorias.filtrarMentorArea); //id da área vai por req.query
 rotas.get('/mentor', mentorias.listarDias);
-rotas.get('/mentor/dias', mentorias.listarDiasEHora);
+rotas.get('/mentor/:mentor', mentorias.obterMentor);
 rotas.get('/mentor/horarios/:hora', mentorias.listarHorarios);
 rotas.post('/usuarios/mentorias', mentorias.disponibilizarHorario);
 rotas.post('/mentorias/marcar', mentorias.marcarMentoria)

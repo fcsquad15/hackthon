@@ -11,20 +11,16 @@ import "./styles.css";
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const [openModal, setOpenModal] = useUser();
+  const { openModal, setOpenModal } = useUser();
 
   return (
     <>
-      {openModal && (
-        <ModalMenthor
-          setOpenModal={setOpenModal}
-        />
-      )}
+      {openModal && <ModalMenthor />}
       <section className="GreenSection">
         <div className="TextGreen">
           <h1 className="GreenTitle">Technical Share</h1>
           <h2 className="GreenText">
-            Conectando pessoas              interessadas pela tecnologia
+            Conectando pessoas interessadas pela tecnologia
           </h2>
         </div>
 

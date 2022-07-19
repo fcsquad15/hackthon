@@ -10,7 +10,7 @@ const listarNotificacoes = async (req, res) => {
     }
 
     try {
-        const notificacoes = await conexao.query('SELECT * FROM notificacao WHERE usuario_id=$1 ORDER BY data_time', [id]);
+        const notificacoes = await conexao.query('SELECT * FROM notificacao WHERE usuario_id=$1 ORDER BY data_time DESC', [id]);
 
         if (notificacoes.rowCount === 0) {
             return res.status(400).json({ "mensagem": 'Não foi possível encontrar as notificações' })

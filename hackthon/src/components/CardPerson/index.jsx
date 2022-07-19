@@ -1,7 +1,15 @@
 /* eslint-disable react/prop-types */
 import "./styles.css";
+import useUser from "../../hooks/useUser";
 
-export default function Card({ avatar, name }) {
+export default function Card({ avatar, name, id }) {
+  const { setOpenDetailPerson, setCurrentPerson } = useUser();
+
+  function openDetail() {
+    setOpenDetailPerson(true);
+    setCurrentPerson(id);
+  }
+
   return (
     <section className="CardPerson">
       <div className="PersonContent">
@@ -10,7 +18,11 @@ export default function Card({ avatar, name }) {
         <span className="PersonPosition">Ux Research</span>
         <span className="PersonLevel">Sênior</span>
       </div>
-      <button type="button" className="PersonButton">
+      <button
+        type="button"
+        className="PersonButton"
+        onClick={() => openDetail()}
+      >
         Sobre
       </button>
     </section>

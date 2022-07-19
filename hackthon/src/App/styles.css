@@ -1,17 +1,49 @@
 * {
-    margin: 0px;
-    padding: 0px;
-    box-sizing: border-box;
-    font-family: 'Montserrat', sans-serif;
-    /* font-family: Calibri, sans-serif; */
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
 }
 
-.openModal {
-    overflow-y: hidden;
+html {
+  font-size: 62.5%;
+}
+
+body {
+  min-width: 100vw;
+
+  overflow-x: hidden;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+body::-webkit-scrollbar {
+  width: 1rem;
+}
+
+body::-webkit-scrollbar-track {
+  background: #ffffff;
+  border-radius: 4rem;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: rgb(182, 182, 182);
+  border-radius: 4rem;
+  border: 0.1rem solid #ffffff;
 }
 
 .contentPage {
-    min-height: 100vh;
-    padding-top: 10rem;
-    background-color: #F6F7F8;
+  min-height: 100vh;
+  padding-top: 10rem;
+  background-color: #f6f7f8;
 }
