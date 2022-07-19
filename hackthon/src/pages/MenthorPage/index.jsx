@@ -1,28 +1,30 @@
 /* eslint-disable operator-linebreak */
 import { useEffect, useState } from "react";
-// import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 import Card from "../../components/CardPerson";
+import ModalDetailPerson from "../../components/ModalPerson";
+import useUser from "../../hooks/useUser";
 
 import { Get } from "../../services/Conection";
 
 import "./styles.css";
 
 export default function MenthorPage() {
+  const { openDetailPerson } = useUser();
   const [menthors, setMenthors] = useState();
-  // const { habilidadeId } = useParams();
+  const { areaId } = useParams();
+  const { setOpen, setErrorMessage } = useUser();
 
   async function loadMenthor() {
     try {
       const response = await Get(
         // eslint-disable-next-line comma-dangle
-        "/mentorias"
-        // `/mentorias/filtroHab?habilidade=${habilidadeId}`
+        `/mentorias/filtroArea?area=${areaId}`
       );
-      console.log(response.data);
       setMenthors(response.data);
     } catch (error) {
-      toast.error(error.message);
+      setOpen(true);
+      setErrorMessage(error.message);
     }
   }
 
@@ -43,9 +45,11 @@ export default function MenthorPage() {
               key={menthor.id}
               avatar={menthor.avatar}
               name={menthor.nome}
+              id={menthor.id}
             />
           ))}
       </article>
+      {openDetailPerson && <ModalDetailPerson />}
     </section>
   );
 }

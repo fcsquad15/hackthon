@@ -1,28 +1,31 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import useUser from "../../hooks/useUser";
 import { Get } from "../../services/Conection";
 
 import "./styles.css";
 
 // eslint-disable-next-line react/prop-types
-export default function ModalMenthor({ setOpenModal }) {
+export default function ModalMenthor() {
   const navigate = useNavigate();
-  function close() {
-    setOpenModal(false);
-  }
 
   // eslint-disable-next-line no-unused-vars
   const [area, setArea] = useState([]);
+  const { setOpen, setErrorMessage, setOpenModal } = useUser;
 
   async function loadingAreas() {
     try {
-      const response = await Get("/habilidades");
+      const response = await Get("/areas");
       setArea(response.data);
     } catch (error) {
-      toast.error(error.message);
+      setOpen(true);
+      setErrorMessage(error.message);
     }
+  }
+
+  function close() {
+    setOpenModal(false);
   }
 
   useEffect(() => {
@@ -43,7 +46,7 @@ export default function ModalMenthor({ setOpenModal }) {
             key={iten.id}
             onClick={() => navigate(`/mentoria/${iten.id}`)}
           >
-            {iten.habilidade}
+            {iten.area}
           </span>
         ))}
       </article>
