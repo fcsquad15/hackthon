@@ -21,24 +21,23 @@
 
   letter-spacing: -0.011rem;
 
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
-
-
 .TitleList {
-  margin: 3rem 10rem ;
+  margin: 3rem 10rem;
 
-  font-family: 'Calibri';
+  font-family: "Calibri";
   font-style: normal;
   font-weight: 700;
   font-size: 6.4rem;
   letter-spacing: -0.011rem;
-  
-  color: #E8505B;
+
+  color: #e8505b;
 }
 
 .ListMenthor {
+  margin-bottom: 3rem;
   padding: 0 10rem;
 
   display: flex;
@@ -47,10 +46,7 @@
   gap: 1rem;
 }
 
-
-
-@media screen and (max-width:800px) {
-
+@media screen and (max-width: 800px) {
   .ForumPage {
     padding: 2rem;
   }

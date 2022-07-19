@@ -12,7 +12,7 @@ export default function ModalMenthor() {
 
   // eslint-disable-next-line no-unused-vars
   const [area, setArea] = useState([]);
-  const { setOpen, setErrorMessage, setOpenModal } = useUser;
+  const { setOpen, setErrorMessage, setOpenModal } = useUser();
 
   async function loadingAreas() {
     try {
@@ -26,6 +26,11 @@ export default function ModalMenthor() {
 
   function close() {
     setOpenModal(false);
+  }
+
+  function handleArea(id) {
+    setOpenModal(false);
+    navigate(`/mentoria/${id}`);
   }
 
   useEffect(() => {
@@ -44,7 +49,7 @@ export default function ModalMenthor() {
           <span
             className="ItenArea"
             key={iten.id}
-            onClick={() => navigate(`/mentoria/${iten.id}`)}
+            onClick={() => handleArea(iten.id)}
           >
             {iten.area}
           </span>

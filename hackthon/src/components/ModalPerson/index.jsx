@@ -1,18 +1,19 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable comma-dangle */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import "./styles.css";
 
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
-// import { useNavigate } from "react-router-dom";
+import { ptBR } from "date-fns/locale";
 
 import Close from "../../assets/x.svg";
 import useUser from "../../hooks/useUser";
-import { Get } from "../../services/Conection";
+import { Get, Post } from "../../services/Conection";
 
 export default function ModalPersonDetail() {
-  //   const navigate = useNavigate();
-  const { setOpenDetailPerson, currentPerson } = useUser();
+  const { setOpenDetailPerson, currentPerson, setOpen, setErrorMessage } =
+    useUser();
 
   function close() {
     setOpenDetailPerson(false);
@@ -23,24 +24,17 @@ export default function ModalPersonDetail() {
   const [form, setForm] = useState({
     horario: "",
   });
-  const { setOpen, setErrorMessage } = useUser();
 
   function handleFormValue(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  async function loadDetails() {
+  async function loadInfos() {
     try {
-      const response = await Get(`/usuarios/${currentPerson}`);
-      setPerson(response.data);
-
-      const responseAbilities = await Get(
-        `/usuarios/habilidades/${currentPerson}`
-      );
-      setAbilities(responseAbilities.data);
-
-      const responseAgenda = await Get(`/mentor/dias?mentor=${currentPerson}`);
-      setAgenda(responseAgenda.data);
+      const response = await Get(`/mentor/${currentPerson}`);
+      setPerson(response.data.mentor);
+      setAbilities(response.data.habilidade);
+      setAgenda(response.data.horarios);
     } catch (error) {
       setOpen(true);
       setErrorMessage(error.message);
@@ -48,7 +42,7 @@ export default function ModalPersonDetail() {
   }
 
   useEffect(() => {
-    loadDetails();
+    loadInfos();
   }, []);
 
   // eslint-disable-next-line consistent-return
@@ -56,28 +50,29 @@ export default function ModalPersonDetail() {
     e.preventDefault();
 
     if (!form.horario) {
+      setOpen(true);
+      setErrorMessage("É necessário marcar um horário");
       return;
     }
 
     try {
-      //   const { data, ok } = await createDebtService(
-      //     {
-      //       client_id: currentClient.id,
-      //       description: form.description,
-      //       due_date: form.dueDate,
-      //       value: form.value * 100,
-      //       statusDebt_id: form.status === "Pendente" ? 1 : 2,
-      //     },
-      //     token
-      //   );
+      const { data, ok } = await Post("/mentorias/marcar", {
+        usuario_id: 1,
+        agenda_id: form.horario,
+      });
 
-      //   if (!ok) {
-      //     return toast.error(data);
-      //   }
+      if (!ok) {
+        setOpen(true);
+        setErrorMessage(data);
+        return;
+      }
 
       setForm({
         horario: "",
       });
+      setOpen(true);
+      setErrorMessage("Mentoria Marcada com sucesso");
+      setOpenDetailPerson(false);
     } catch (error) {
       setOpen(true);
       setErrorMessage(error.message);
@@ -106,11 +101,17 @@ export default function ModalPersonDetail() {
           <div className="AbilitiesContainer">
             <h2 className="PersonScheduleTitle FontDetail">Habilidades</h2>
             <article className="PersonAbilities">
-              {abilities.map((ability) => (
-                <div className="ModalIten FontDetail" key={ability.id}>
-                  <span>{ability.habilidade}</span>
+              {abilities === "0" ? (
+                abilities.map((ability) => (
+                  <div className="ModalIten FontDetail" key={ability.id}>
+                    <span>{ability.habilidade}</span>
+                  </div>
+                ))
+              ) : (
+                <div className="ModalIten FontDetail">
+                  <span>Nenhuma habilidade cadastrada</span>
                 </div>
-              ))}
+              )}
             </article>
           </div>
           <div className="ScheduleContainer">
@@ -119,22 +120,36 @@ export default function ModalPersonDetail() {
             </h2>
             <form onSubmit={handleSubmit}>
               <div className="PersonHorary">
-                {agenda.map((horario) => (
-                  <div className="ModalIten FontDetail" key={horario.id}>
-                    <label id="horario">
-                      <input
-                        type="radio"
-                        name="horario"
-                        value={horario.id}
-                        onChange={handleFormValue}
-                      />
-                      <span>{format(horario.dia, "dd/MM")}</span>
-                      <span>{horario.hora}</span>
-                    </label>
+                {agenda.length === "0" ? (
+                  agenda.map((horario) => (
+                    <div className="ModalIten FontDetail" key={horario.id}>
+                      <label id="horario" className="HourIten">
+                        <div className="AlignCenter">
+                          <input
+                            type="radio"
+                            name="horario"
+                            value={horario.id}
+                            onChange={handleFormValue}
+                          />
+                          <span>
+                            {format(new Date(horario.dia), "eeeeee dd/MM", {
+                              locale: ptBR,
+                            })}
+                          </span>
+                        </div>
+                        <span>{horario.hora}</span>
+                      </label>
+                    </div>
+                  ))
+                ) : (
+                  <div className="ModalIten FontDetail AlignCenter">
+                    <span>Nenhum horário disponível</span>
                   </div>
-                ))}
+                )}
               </div>
-              <button type="submit">Agendar mentoria</button>
+              <button type="submit" className="ScheduleBtn">
+                Agendar mentoria
+              </button>
             </form>
           </div>
         </article>
@@ -142,10 +157,3 @@ export default function ModalPersonDetail() {
     </section>
   );
 }
-
-// {person.map((iten) => (
-//   // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-//   <span className="ItenArea" key={iten.id}>
-//     {iten.name}
-//   </span>
-// ))}

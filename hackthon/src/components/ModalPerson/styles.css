@@ -1,138 +1,194 @@
-.BackdropDetail{
-    width: 100%;
-    height: 100vh;
-    position: fixed;
-    left: 0;
-    top: 0;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: #FFFFFF;
-    z-index: 10;
-  
-    padding: 10rem;
+.BackdropDetail {
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+  z-index: 10;
 
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
+  padding: 10rem;
+
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.ModalDetail{
-    display: flex;
-    position: relative;
+.ModalDetail {
+  height: 70vh;
 
-    width: 50%;
+  display: flex;
+  position: relative;
+
+  width: 50%;
 }
 
-.CloseButton{
-    position: absolute;
-    width: 2rem;
-    height: 2rem;
-    background: none;
-    top: -3rem;
-    right: -3rem;
-    cursor: pointer;
+.CloseButton {
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  background: none;
+  top: -3rem;
+  right: -3rem;
+  cursor: pointer;
 }
 
-.PersonDetail{
-    width: 24rem;
-    height: 100%;
+.PersonDetail {
+  width: 24rem;
 
-    padding: 3rem 2rem;
-    background-color: #035757;
-    border-radius: 1rem;
+  padding: 3rem 2rem;
+  background-color: #035757;
+  border-radius: 1rem;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.DetailAvatar{
-    width: 12rem;
-    height: 12rem;
-    border-radius: 50%;
+.DetailAvatar {
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
 
-    margin-bottom: 2.5rem;
+  margin-bottom: 2.5rem;
 }
 
-.FontDetail{
-    font-family: 'Calibri';
-    font-style: normal;
+.FontDetail {
+  font-family: "Calibri";
+  font-style: normal;
 
-    letter-spacing: -0.011rem;
-    
-    text-align: center;
+  letter-spacing: -0.011rem;
+
+  text-align: center;
 }
 
-.DetailName{
-    font-weight: 700;
-    font-size: 2.4rem;
-    color: #FFFFFF;
+.DetailName {
+  font-weight: 700;
+  font-size: 2.2rem;
+  color: #ffffff;
 }
 
-.DetailPosition{
-    font-weight: 400;
-    font-size: 2rem;
-    
-    color: #ffffff98;
+.DetailPosition {
+  font-weight: 400;
+  font-size: 2rem;
+
+  color: #ffffff98;
 }
 
-.DetailLevel{
-    font-weight: 400;
-    font-size: 1.6rem;
+.DetailLevel {
+  font-weight: 400;
+  font-size: 1.6rem;
 
-    color: #ffffff98;
+  color: #ffffff98;
 }
 
-.PersonSchedule{
-    width: 100%;
-    height: 100%;
-    
-    margin-left: 1rem;
-    padding: 3rem 2rem;
-    border-radius: 1rem;
+.PersonSchedule {
+  width: 44rem;
 
-    background-color: #ffffff;
+  margin-left: 1rem;
+  padding: 2rem;
+  border-radius: 1rem;
+  gap: 1rem;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
+  background-color: #ffffff;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  overflow-y: auto;
 }
 
-.PersonScheduleTitle{
-    font-weight: 700;
-    font-size: 2rem;
-    letter-spacing: -0.011rem;
-
-    color: #747474;
+.PersonSchedule::-webkit-scrollbar {
+  width: 0.6rem;
 }
 
-.ModalIten{
-    width: 17rem;
-
-    padding: 0.8rem;
-    margin: 0.6rem;
-    border-radius: 0.8rem;
-
-    display: flex;
-    justify-content: center;
-    background: #E8F0F0;
-    color: #000000;
+.PersonSchedule::-webkit-scrollbar-track {
+  background: rgb(255, 255, 255);
+  border-radius: 4rem;
 }
 
-.PersonHorary{
-    display: flex;
-    flex-wrap: wrap;
-    overflow: auto;
-
-    margin-bottom: 1.2rem;
-
-    height: 50%;
+.PersonSchedule::-webkit-scrollbar-thumb {
+  background-color: rgb(182, 182, 182);
+  border-radius: 4rem;
 }
 
-.ScheduleContainer{
-    height: 40%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.PersonScheduleTitle {
+  font-weight: 700;
+  font-size: 2rem;
+  letter-spacing: -0.011rem;
+
+  color: #747474;
+}
+
+.ModalIten {
+  width: 15rem;
+
+  padding: 0.8rem;
+  margin: 0.4rem;
+  border-radius: 0.8rem;
+
+  display: flex;
+  justify-content: center;
+  background: #e8f0f0;
+  color: #000000;
+}
+
+.AlignCenter {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.HourIten {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 1rem;
+}
+
+.PersonHorary {
+  display: flex;
+  flex-wrap: wrap;
+  overflow: auto;
+
+  height: 80%;
+}
+
+.ScheduleContainer {
+  height: 50%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.ScheduleBtn {
+  width: 90%;
+  margin: 1rem;
+  padding: 1rem;
+
+  background: #ffffff;
+  border: 3px solid #e8505b;
+  border-radius: 70px;
+  text-align: center;
+
+  cursor: pointer;
+
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.8rem;
+  letter-spacing: -0.011rem;
+
+  color: #e8505b;
+}
+
+.ScheduleBtn:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
 }
