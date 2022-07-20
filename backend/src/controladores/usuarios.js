@@ -1,7 +1,7 @@
 const conexao = require('../Server/conexao');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const segredo = require('../segredo');
+const segredo = process.env.TOKEN_SECRET;
 
 const listarUsuarios = async (req, res) => {
     try {
