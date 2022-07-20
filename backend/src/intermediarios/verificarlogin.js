@@ -5,7 +5,7 @@ const messageError = require("../Mensagens/errorToast");
 const segredo = process.env.TOKEN_SECRET;
 
 const verificarLogin = async (req, res, next) => {
-  const token = req.headers("token");
+  const token = req.header("token");
 
   if (!token) {
     return res.status(401).json(messageError.notAuthorization);

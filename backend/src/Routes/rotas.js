@@ -11,7 +11,7 @@ const rotas = express();
 
 //rotas sem autenticação
 rotas.post("/", noAuth.login);
-rotas.post("/usuarios/", noAuth.signUpUser);
+rotas.post("/usuarios", noAuth.signUpUser);
 
 // rotas para utilidades que não vamos usar no front, usei para testar a conexão com o banco de dados
 rotas.post("/habilidades", utilitarios.cadastrarHabilidade);
@@ -26,9 +26,8 @@ rotas.use(verificarLogin);
 
 //rotas para manuseio do usuário
 rotas.get("/usuarios", usuarios.listarUsuarios);
-rotas.get("/usuarios/:id", usuarios.obterUsuario); //id do usuario
-// rotas.put('/usuarios/', usuarios.atualizarUsuario); //com autenticação
-rotas.put("/usuarios/:id", usuarios.atualizarUsuario); //id do usuario
+rotas.get("/usuario", usuarios.obterUsuario);
+rotas.patch("/usuario", usuarios.atualizarUsuario); //com autenticação
 // rotas.delete('/usuarios/', usuarios.deletarUsuario);  // com autenticação
 rotas.delete("/usuarios/:id", usuarios.deletarUsuario); //id do usuario
 rotas.post("/usuarios/habilidades", usuarios.addHabilidadeUsuario);

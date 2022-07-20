@@ -1,7 +1,7 @@
 const knex = require("../Server/conexao");
 
-const emailExists = async (email) => {
-  const list = await knex("usuarios").select("email").where({ email }).first();
+const listUsers = async () => {
+  const list = await knex("usuarios").orderBy("nome");
   return list;
 };
 
@@ -31,20 +31,20 @@ const insertUser = async (
   return addedUser;
 };
 
-const updateUser = async (id, name, email, password, cpf, phone) => {
-  name = name.trim();
-  email = email.trim();
-  cpf = cpf && cpf.trim();
-  phone = phone && phone.trim();
+const updateUser = async (id, nome, email, senha, bio, avatar, area) => {
+  nome = nome && nome.trim();
+  email = email && email.trim();
+  bio = bio && bio.trim();
+  area = area && area.trim();
 
   const userUpdated = await knex("usuarios")
     .where({ id })
-    .update({ name, email, password, cpf, phone });
+    .update({ nome, email, senha, bio, avatar, area });
   return userUpdated;
 };
 
 module.exports = {
-  emailExists,
+  listUsers,
   userEmail,
   userExists,
   insertUser,
