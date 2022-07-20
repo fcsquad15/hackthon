@@ -1,4 +1,4 @@
-const conexao = require('../conexao');
+const conexao = require('../Server/conexao');
 
 const listarNotificacoes = async (req, res) => {
     // const { id } = req.usuario // para usar com Autenticaçaõ

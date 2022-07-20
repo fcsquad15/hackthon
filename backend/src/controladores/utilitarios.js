@@ -1,4 +1,4 @@
-const conexao = require('../conexao')
+const conexao = require('../Server/conexao')
 
 const cadastrarHabilidade = async (req, res) => {
     const { habilidade } = req.body;

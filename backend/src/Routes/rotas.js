@@ -1,10 +1,10 @@
 const express = require('express');
-const usuarios = require('./controladores/usuarios');
-const utilitarios = require('./controladores/utilitarios');
-const forum = require('./controladores/forum');
-const mentorias = require('./controladores/mentorias');
-const notificacao = require('./controladores/notificacoes');
-const verificarLogin = require('./intermediarios/verificarlogin');
+const usuarios = require('../controladores/usuarios');
+const utilitarios = require('../controladores/utilitarios');
+const forum = require('../controladores/forum');
+const mentorias = require('../controladores/mentorias');
+const notificacao = require('../controladores/notificacoes');
+const verificarLogin = require('../intermediarios/verificarlogin');
 
 
 

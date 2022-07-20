@@ -1,4 +1,4 @@
-const conexao = require('../conexao');
+const conexao = require('../Server/conexao');
 
 const disponibilizarHorario = async (req, res) => {
     // const { id: usuario_id } = req.usuario

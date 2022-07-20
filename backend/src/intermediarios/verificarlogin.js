@@ -1,4 +1,4 @@
-const conexao = require('../conexao')
+const conexao = require('../Server/conexao')
 const jwt = require('jsonwebtoken');
 const segredo = require('../segredo');
 

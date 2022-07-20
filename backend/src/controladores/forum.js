@@ -1,4 +1,4 @@
-const conexao = require('../conexao');
+const conexao = require('../Server/conexao');
 
 
 const criarPergunta = async (req, res) => {
