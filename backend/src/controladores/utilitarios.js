@@ -9,7 +9,6 @@ const messageSuccess = require("../Mensagens/successToast");
 const cadastrarHabilidade = async (req, res) => {
   const { habilidade } = req.body;
 
-  console.log(req.body);
   try {
     await utilsSchema.newSkill.validate(req.body);
 
@@ -42,59 +41,45 @@ const listarHabilidade = async (req, res) => {
       return res.status(400).json(messageError.utilsNotFound);
     }
 
-    res.status(201).json(habilidades);
+    res.status(200).json(habilidades);
   } catch (error) {
-    return res.status(400).json(error);
+    return res.status(400).json(error.message);
   }
 };
 
 const cadastrarHorario = async (req, res) => {
   const { hora } = req.body;
 
-  if (!hora) {
-    return res
-      .status(404)
-      .json({ mensagem: "Obrigatório informar o horário." });
-  }
-
   try {
-    const horaExistente = await conexao.query(
-      "SELECT * FROM horarios WHERE hora= $1",
-      [hora]
-    );
+    await utilsSchema.newTime.validate(req.body);
 
-    if (horaExistente.rowCount !== 0) {
-      return res.status(400).json({ mensagem: "Horário já cadastrado" });
+    const horaExistente = await utilsModel.timeExists(hora);
+
+    if (horaExistente) {
+      return res.status(400).json(messageError.timeExists);
     }
 
-    const novaHabilidade = await conexao.query(
-      "INSERT INTO horarios (hora) VALUES ( $1 )",
-      [hora]
-    );
+    const novaHabilidade = utilsModel.insertTime(hora);
 
-    if (novaHabilidade.rowCount === 0) {
-      return res
-        .status(400)
-        .json({ mensagem: "Não foi possível inserir a hora" });
+    if (!novaHabilidade) {
+      return res.status(400).json(messageError.utilsErros);
     }
 
     res.status(201).json({ mensagem: "Hora Cadastrada" });
   } catch (error) {
-    return res.status(400).json(error);
+    return res.status(400).json(error.message);
   }
 };
 
 const listarHorario = async (req, res) => {
   try {
-    const horarios = await conexao.query(
-      "SELECT * FROM horarios ORDER BY hora"
-    );
+    const horarios = await utilsModel.getTime();
 
-    if (horarios.rowCount === 0) {
-      return res.status(400).json({ mensagem: "Nenhum horários encontrado" });
+    if (!horarios) {
+      return res.status(400).json(messageError.utilsNotFound);
     }
 
-    res.status(201).json(horarios.rows);
+    res.status(200).json(horarios);
   } catch (error) {
     return res.status(400).json(error);
   }
@@ -102,51 +87,39 @@ const listarHorario = async (req, res) => {
 
 const listarAreas = async (req, res) => {
   try {
-    const areas = await conexao.query("SELECT * FROM area ORDER BY area");
+    const areas = await utilsModel.getAreas();
 
-    if (areas.rowCount === 0) {
-      return res.status(400).json({ mensagem: "Nenhum área foi encontrada" });
+    if (!areas) {
+      return res.status(400).json(messageError.utilsNotFound);
     }
 
-    res.status(201).json(areas.rows);
+    res.status(201).json(areas);
   } catch (error) {
-    return res.status(400).json(error);
+    return res.status(400).json(error.message);
   }
 };
 
 const cadastrarAreas = async (req, res) => {
   const { area } = req.body;
 
-  if (!area) {
-    return res
-      .status(404)
-      .json({ mensagem: "Obrigatório informar a nova área." });
-  }
-
   try {
-    const areaExistente = await conexao.query(
-      "SELECT * FROM area WHERE area=$1",
-      [area]
-    );
+    await utilsSchema.newArea.validate(req.body);
 
-    if (areaExistente.rowCount !== 0) {
-      return res.status(400).json({ mensagem: "Área já cadastrada." });
+    const areaExistente = await utilsModel.areasExists(area);
+
+    if (areaExistente) {
+      return res.status(400).json(messageError.areaExists);
     }
 
-    const novaArea = await conexao.query(
-      "INSERT INTO area (area) VALUES ( $1 )",
-      [area]
-    );
+    const novaArea = await utilsModel.insertArea(area);
 
-    if (novaArea.rowCount === 0) {
-      return res
-        .status(400)
-        .json({ mensagem: "Não foi possível inserir a nova área." });
+    if (!novaArea) {
+      return res.status(400).json(messageError.utilsErros);
     }
 
     res.status(201).json({ mensagem: "Área Cadastrada" });
   } catch (error) {
-    return res.status(400).json(error);
+    return res.status(400).json(error.message);
   }
 };
 

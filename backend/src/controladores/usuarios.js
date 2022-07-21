@@ -36,9 +36,8 @@ const obterUsuario = async (req, res) => {
 };
 
 const addHabilidadeUsuario = async (req, res) => {
-  // const { id: usuario_id } = req.usuario // para usar com Autenticaçaõ
-  // const { habilidade_id } = req.body;
-  const { usuario_id, habilidade_id } = req.body;
+  const { id: usuario_id } = req.usuario;
+  const { habilidade_id } = req.body;
 
   if (!usuario_id || !habilidade_id) {
     return res
@@ -47,15 +46,6 @@ const addHabilidadeUsuario = async (req, res) => {
   }
 
   try {
-    const { rowCount: buscarUsuario } = await conexao.query(
-      "SELECT * FROM usuarios WHERE id = $1",
-      [usuario_id]
-    );
-
-    if (buscarUsuario === 0) {
-      return res.status(400).json({ mensagem: "Usuário não encontrado" });
-    }
-
     const { rowCount: habilidadeExistente } = await conexao.query(
       "SELECT * FROM habilidadeusuarios WHERE usuario_id=$1 AND habilidade_id=$2",
       [usuario_id, habilidade_id]
@@ -230,10 +220,8 @@ const atualizarUsuario = async (req, res) => {
 };
 
 const deletarUsuario = async (req, res) => {
-  // Para usar com autenticação
-  // const { id } = req.usuario;
+  const { id } = req.usuario;
 
-  const { id } = req.params;
   try {
     const usuario = await conexao.query("DELETE FROM usuarios WHERE id = $1", [
       id,
