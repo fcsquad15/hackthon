@@ -26,22 +26,22 @@ rotas.use(verificarLogin);
 rotas.get("/usuarios", usuarios.listarUsuarios);
 rotas.get("/usuario", usuarios.obterUsuario);
 rotas.patch("/usuario", usuarios.atualizarUsuario);
-
-// rotas.delete('/usuarios/', usuarios.deletarUsuario);  // com autenticação
-rotas.delete("/usuarios/:id", usuarios.deletarUsuario); //id do usuario
-rotas.get("/usuarios/habilidades/:id", usuarios.listarHabilidadesUsuario); //id do usuario *
+rotas.get("/usuarios/habilidades/:id", usuarios.listarHabilidadesUsuario);
 rotas.post("/usuarios/habilidades", usuarios.addHabilidadeUsuario);
 
+rotas.delete("/usuarios/", usuarios.deletarUsuario);
 rotas.post("/usuarios/areas", usuarios.addAreaUsuario);
 rotas.get("/usuarios/areas/:id", usuarios.listarAreaUsuario);
 
 //rotas para notificações
 rotas.get("/notificacoes", notificacao.listarNotificacoes);
 rotas.post("/notificacoes", notificacao.visualizarTodasNotificacoes);
+
 rotas.get("/notificacoes/quantidade/:id", notificacao.contarNotificacoes);
 
 // rotas para o forum
-rotas.get("/forum", forum.listarPerguntas); //*
+rotas.get("/forum", forum.listarPerguntas);
+
 rotas.get(
   "/forum/filtro/:habilidade_id",
   forum.listarPerguntasFiltroHabilidade
@@ -51,14 +51,12 @@ rotas.post("/forum/", forum.criarPergunta);
 rotas.post("/forum/:postagem_id", forum.comentarPergunta); // id da postagem
 
 // rotas para as mentorias
+rotas.get("/mentorias/filtroArea", mentorias.filtrarMentorArea);
+rotas.get("/mentor/:mentor", mentorias.obterMentor);
+rotas.post("/mentorias/marcar", mentorias.marcarMentoria);
+rotas.get("/mentorias/marcadas", mentorias.listarMentoriasMarcadas);
+
 rotas.get("/mentorias", mentorias.listarMentores);
-rotas.get("/mentorias/filtroHab", mentorias.filtrarMentorTema); // id da habilidade vai por req.query
-rotas.get("/mentorias/filtroArea", mentorias.filtrarMentorArea); //id da área vai por req.query *
-rotas.get("/mentor", mentorias.listarDias);
-rotas.get("/mentor/:mentor", mentorias.obterMentor); //*
-rotas.get("/mentor/horarios/:hora", mentorias.listarHorarios);
 rotas.post("/usuarios/mentorias", mentorias.disponibilizarHorario);
-rotas.post("/mentorias/marcar", mentorias.marcarMentoria); //*
-rotas.get("/mentorias/marcadas/:usuario_id", mentorias.listarMentoriasMarcadas); //*
 
 module.exports = rotas;

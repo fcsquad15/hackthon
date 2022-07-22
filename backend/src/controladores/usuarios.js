@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const conexao = require("../Server/conexao");
 
 const usersModel = require("../Models/usersModel");
+const usersInfosModel = require("../Models/usersInfosModel");
 const noAuthModel = require("../Models/noAuthModel");
 
 const usersSchema = require("../Validações/usersSchema");
@@ -35,66 +36,57 @@ const obterUsuario = async (req, res) => {
   }
 };
 
+//ok
 const addHabilidadeUsuario = async (req, res) => {
   const { id: usuario_id } = req.usuario;
   const { habilidade_id } = req.body;
 
   if (!usuario_id || !habilidade_id) {
-    return res
-      .status(404)
-      .json({ mensagem: "Dados obrigatórios não informados." });
+    return res.status(404).json(messageError.userAddInfo);
   }
 
   try {
-    const { rowCount: habilidadeExistente } = await conexao.query(
-      "SELECT * FROM habilidadeusuarios WHERE usuario_id=$1 AND habilidade_id=$2",
-      [usuario_id, habilidade_id]
+    const skillExists = await usersInfosModel.skillExists(
+      usuario_id,
+      habilidade_id
     );
 
-    if (habilidadeExistente > 0) {
-      return res.status(400).json({ mensagem: "Habilidade já cadastrada" });
+    if (skillExists) {
+      return res.status(400).json(messageError.skillExists);
     }
 
-    const novaHabilidade = await conexao.query(
-      "INSERT INTO habilidadeusuarios (usuario_id,habilidade_id) VALUES ( $1, $2)",
-      [usuario_id, habilidade_id]
+    const newSkill = await usersInfosModel.insertSkill(
+      usuario_id,
+      habilidade_id
     );
 
-    if (novaHabilidade.rowCount === 0) {
-      return res
-        .status(400)
-        .json({ mensagem: "Não foi possível inserir a habilidade" });
+    if (!newSkill) {
+      return res.status(400).json(messageError.userAddInfo);
     }
 
     res.status(201).json({ mensagem: "Habilidade inserida com sucesso" });
   } catch (error) {
-    return res.status(400).json(error);
+    return res.status(400).json(error.message);
   }
 };
 
+//ok
 const listarHabilidadesUsuario = async (req, res) => {
   const { id } = req.params;
 
   if (!id) {
-    return res
-      .status(404)
-      .json({ mensagem: "Dados obrigatórios não informados." });
+    return res.status(404).json(messageError.userNotFound);
   }
 
   try {
-    const habilidadesUsuario = await conexao.query(
-      "SELECT habilidades.id, habilidades.habilidade        FROM habilidadeusuarios        LEFT JOIN usuarios ON usuarios.id= habilidadeusuarios.usuario_id        LEFT JOIN habilidades ON habilidades.id = habilidadeusuarios.habilidade_id  WHERE usuarios.id=$1     ",
-      [id]
-    );
+    const habilidadesUsuario = await usersInfosModel.listSkills(id);
 
-    if (habilidadesUsuario.rowCount === 0) {
-      return res
-        .status(400)
-        .json({ mensagem: "Não foi possível encontrar usuários" });
+    if (!habilidadesUsuario) {
+      return res.status(400).json(messageError.userNotFound);
     }
-    res.status(200).json(habilidadesUsuario.rows);
+    res.status(200).json(habilidadesUsuario);
   } catch (error) {
-    res.status(400).json(error);
+    res.status(400).json(error.message);
   }
 
   return res.status(200).json();

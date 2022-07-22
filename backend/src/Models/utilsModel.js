@@ -50,6 +50,11 @@ const insertTime = async (hora) => {
   return newTime;
 };
 
+const getTimeById = async (id) => {
+  const time = await knex("horarios").where({ id }).first();
+  return time;
+};
+
 module.exports = {
   getSkills,
   skillsExists,
@@ -60,4 +65,5 @@ module.exports = {
   getTime,
   timeExists,
   insertTime,
+  getTimeById,
 };

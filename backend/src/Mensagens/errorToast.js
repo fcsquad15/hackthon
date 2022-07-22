@@ -12,6 +12,10 @@ const errorToast = {
   utilsNotFound: "Não foi possível encontrar as informação!",
   noData: "É obrigatório informar ao menos um campo para atualização",
   userUpdate: "O usuário não foi atualizado.",
+  userAddInfo: "Não foi possível adicionar a informação.",
+  scheduleAvailable: "Horário Indisponível.",
+  unfinishedAction: "Ação não finalizada.",
+  createNotification: "Não foi possível criar a notificação.",
 };
 
 module.exports = errorToast;

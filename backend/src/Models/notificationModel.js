@@ -16,7 +16,16 @@ const readAllNotification = async (id) => {
   return notification;
 };
 
+const createNotification = async (usuario_id, mensagem) => {
+  const mentorship = await knex("notificacao")
+    .insert({ usuario_id, mensagem })
+    .returning("*");
+
+  return mentorship;
+};
+
 module.exports = {
   listNotification,
   readAllNotification,
+  createNotification,
 };
