@@ -23,7 +23,7 @@ const getUser = async (id) => {
 
 const getMenthorSchedule = async (usuario_id) => {
   const list = await knex("agenda")
-    .select("agenda.id", "agenda.dia")
+    .select("agenda.id", "agenda.dia", "horarios.hora")
     .join("horarios", "horarios.id", "=", "agenda.hora_id")
     .where({ usuario_id, "agenda.disponivel": true })
     .orderBy("agenda.dia", "horarios.hora");
@@ -36,6 +36,7 @@ const getScheduledMenthorships = async (usuario_id) => {
     .join("agenda", "mentorias.agenda_id", "=", "agenda.id")
     .join("horarios", "agenda.hora_id", "=", "horarios.id")
     .where({ "mentorias.usuario_mentorado_id": usuario_id })
+    .limit(5)
     .orderBy("agenda.dia", "horarios.hora");
   return list;
 };

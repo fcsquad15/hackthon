@@ -32,17 +32,17 @@
 
   letter-spacing: -0.011rem;
 
-  color: #ffffff;
+  color: #FFFFFF;
 }
 
 .GreenText {
   font-style: normal;
   font-weight: 700;
-  font-size: 4rem;
+  font-size: 4.0rem;
   line-height: 4.9rem;
   letter-spacing: -0.011rem;
 
-  color: #ffffff;
+  color: #FFFFFF;
 }
 
 .GirlGreen {
@@ -64,19 +64,17 @@
   align-items: center;
 
   padding-bottom: 5rem;
-
-  background-color: #c2d1d1;
 }
 
 .MenthorBtn {
   background-color: #e8505b;
   border: none;
 
-  color: #ffffff;
+  color: #FFFFFF;
 }
 
 .ForumBtn {
-  background-color: #ffffff;
+  background-color: #FFFFFF;
   border: 2px solid #e8505b;
 
   color: #e8505b;

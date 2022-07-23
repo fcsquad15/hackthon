@@ -10,6 +10,7 @@ import Profile from "../../assets/profile-icon-png-898.png";
 import { Get } from "../../services/Conection";
 
 import "./styles.css";
+import { getItem } from "../../utils/Storage";
 
 export default function ForumPage() {
   const [posts, setPosts] = useState([]);
@@ -18,9 +19,11 @@ export default function ForumPage() {
   const [openFilter, setOpenFilter] = useState(false);
   const { setOpen, setErrorMessage } = useUser();
 
+  const token = getItem("token");
+
   async function loadPost() {
     try {
-      const response = await Get("/forum");
+      const response = await Get("/forum", token);
       setPosts(response.data);
     } catch (error) {
       setOpen(true);
@@ -30,7 +33,7 @@ export default function ForumPage() {
 
   async function loadMentorias() {
     try {
-      const response = await Get("/mentorias/marcadas/1");
+      const response = await Get("/mentorias/marcadas", token);
       setMentorias(response.data);
     } catch (error) {
       setOpen(true);

@@ -1,3 +1,4 @@
+/* eslint-disable comma-dangle */
 /* eslint-disable operator-linebreak */
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -6,6 +7,7 @@ import ModalDetailPerson from "../../components/ModalPerson";
 import useUser from "../../hooks/useUser";
 
 import { Get } from "../../services/Conection";
+import { getItem } from "../../utils/Storage";
 
 import "./styles.css";
 
@@ -14,13 +16,11 @@ export default function MenthorPage() {
   const [menthors, setMenthors] = useState();
   const { areaId } = useParams();
   const { setOpen, setErrorMessage } = useUser();
+  const token = getItem("token");
 
   async function loadMenthor() {
     try {
-      const response = await Get(
-        // eslint-disable-next-line comma-dangle
-        `/mentorias/filtroArea?area=${areaId}`
-      );
+      const response = await Get(`/mentorias/filtroArea?area=${areaId}`, token);
       setMenthors(response.data);
     } catch (error) {
       setOpen(true);
