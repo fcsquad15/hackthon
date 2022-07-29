@@ -11,9 +11,12 @@ import Close from "../../assets/x.svg";
 import useUser from "../../hooks/useUser";
 import { Get, Post } from "../../services/Conection";
 
+import { getItem } from "../../utils/Storage";
+
 export default function ModalPersonDetail() {
   const { setOpenDetailPerson, currentPerson, setOpen, setErrorMessage } =
     useUser();
+  const token = getItem("token");
 
   function close() {
     setOpenDetailPerson(false);
@@ -31,10 +34,14 @@ export default function ModalPersonDetail() {
 
   async function loadInfos() {
     try {
-      const response = await Get(`/mentor/${currentPerson}`);
-      setPerson(response.data.mentor);
-      setAbilities(response.data.habilidade);
-      setAgenda(response.data.horarios);
+      const { data, ok } = await Get(`/mentor/${currentPerson}`, token);
+      if (!ok) {
+        return;
+      }
+      console.log(data);
+      setPerson(data.mentor);
+      setAbilities(data.habilidade);
+      setAgenda(data.horarios);
     } catch (error) {
       setOpen(true);
       setErrorMessage(error.message);
@@ -56,10 +63,14 @@ export default function ModalPersonDetail() {
     }
 
     try {
-      const { data, ok } = await Post("/mentorias/marcar", {
-        usuario_id: 1,
-        agenda_id: form.horario,
-      });
+      const { data, ok } = await Post(
+        "/mentorias/marcar",
+        {
+          usuario_id: 1,
+          agenda_id: form.horario,
+        },
+        token
+      );
 
       if (!ok) {
         setOpen(true);
@@ -101,16 +112,16 @@ export default function ModalPersonDetail() {
           <div className="AbilitiesContainer">
             <h2 className="PersonScheduleTitle FontDetail">Habilidades</h2>
             <article className="PersonAbilities">
-              {abilities === "0" ? (
+              {abilities === "Não tem habilidades cadastradas" ? (
+                <div className="ModalIten FontDetail" key={abilities}>
+                  <span>{abilities}</span>
+                </div>
+              ) : (
                 abilities.map((ability) => (
                   <div className="ModalIten FontDetail" key={ability.id}>
                     <span>{ability.habilidade}</span>
                   </div>
                 ))
-              ) : (
-                <div className="ModalIten FontDetail">
-                  <span>Nenhuma habilidade cadastrada</span>
-                </div>
               )}
             </article>
           </div>
@@ -120,7 +131,11 @@ export default function ModalPersonDetail() {
             </h2>
             <form onSubmit={handleSubmit}>
               <div className="PersonHorary">
-                {agenda.length === "0" ? (
+                {agenda === "Não tem horário disponível" ? (
+                  <div className="ModalIten FontDetail">
+                    <span>{agenda}</span>
+                  </div>
+                ) : (
                   agenda.map((horario) => (
                     <div className="ModalIten FontDetail" key={horario.id}>
                       <label id="horario" className="HourIten">
@@ -141,10 +156,6 @@ export default function ModalPersonDetail() {
                       </label>
                     </div>
                   ))
-                ) : (
-                  <div className="ModalIten FontDetail AlignCenter">
-                    <span>Nenhum horário disponível</span>
-                  </div>
                 )}
               </div>
               <button type="submit" className="ScheduleBtn">

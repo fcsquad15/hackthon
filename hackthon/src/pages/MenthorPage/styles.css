@@ -3,6 +3,9 @@
   flex-direction: column;
 
   /* padding: 6rem 10rem 0; */
+  background-color: #c2d1d1;
+
+  min-height: calc(100vh - 10rem);
 }
 
 .TitleMenthor {

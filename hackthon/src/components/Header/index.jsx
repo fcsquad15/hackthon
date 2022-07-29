@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -5,13 +6,14 @@ import NotificationImportantIcon from "@mui/icons-material/NotificationImportant
 import Badge from "@mui/material/Badge";
 import IconSearch from "../../assets/search.svg";
 
-import { Get, Post } from "../../services/Conection";
-
-import "./style.css";
 import useUser from "../../hooks/useUser";
+import { Get, Post } from "../../services/Conection";
+import { getItem } from "../../utils/Storage";
+import "./style.css";
 
 export default function Header() {
   const navigate = useNavigate();
+  const token = getItem("token");
 
   const [user, setUser] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
@@ -21,8 +23,11 @@ export default function Header() {
 
   async function loadUser() {
     try {
-      const response = await Get("/usuarios/1");
-      setUser(response.data);
+      const { data, ok } = await Get("/usuario", token);
+      if (!ok) {
+        return alert(data);
+      }
+      setUser(data);
     } catch (error) {
       setOpen(true);
       setErrorMessage(error.message);
@@ -31,9 +36,12 @@ export default function Header() {
 
   async function loadNotification() {
     try {
-      const response = await Get("/notificacoes/1");
-      setNotification(response.data);
-      const notRead = response.data.filter((iten) => !iten.lida);
+      const { data, ok } = await Get("/notificacoes", token);
+      if (!ok) {
+        return alert(data);
+      }
+      setNotification(data);
+      const notRead = data.filter((iten) => !iten.lida);
       setNotificationNotRead(notRead);
     } catch (error) {
       setOpen(true);
@@ -43,9 +51,14 @@ export default function Header() {
 
   async function readAllNotification() {
     try {
-      await Post("/notificacoes/", {
-        id: 1,
-      });
+      await Post(
+        "/notificacoes/",
+        {
+          id: 1,
+        },
+        // eslint-disable-next-line comma-dangle
+        token
+      );
     } catch (error) {
       setOpen(true);
       setErrorMessage(error.message);
@@ -62,53 +75,63 @@ export default function Header() {
   }
 
   useEffect(() => {
-    loadUser();
-    loadNotification();
+    if (token) {
+      loadUser();
+      loadNotification();
+    }
   }, [showNotification]);
 
   return (
     <section className="Header">
-      <button className="Logo" type="button" onClick={() => navigate("/")}>
-        Technical Share
-      </button>
-      <div className="SearchContainer">
-        <img className="IconSearch" src={IconSearch} alt="Search" />
-        <input placeholder="Pesquisa" className="HeaderSearch" />
-      </div>
-      <div className="ContentHeader">
-        <button
-          type="button"
-          className="ForumHeader"
-          onClick={() => navigate("/forum")}
-        >
-          Fórum
-        </button>
-        <div className="NotificationBadge">
-          <Badge
-            badgeContent={notificationNotRead.length}
-            color="error"
-            onClick={() => handleNotification()}
+      {token && (
+        <>
+          <button
+            className="Logo"
+            type="button"
+            onClick={() => navigate("/home")}
           >
-            <NotificationImportantIcon
-              color="action"
-              sx={{ height: "6rem", width: "6rem", cursor: "pointer" }}
-            />
-          </Badge>
-        </div>
-        <img src={user.avatar} alt="profile" className="ProfileContainer" />
-      </div>
-      {showNotification && (
-        <section className="NotificationContainer">
-          {notification.map((iten) => (
-            <div
-              key={iten.id}
-              className={iten.lida ? "Read Notification" : "Notification"}
+            Technical Share
+          </button>
+          <div className="SearchContainer">
+            <img className="IconSearch" src={IconSearch} alt="Search" />
+            <input placeholder="Pesquisa" className="HeaderSearch" />
+          </div>
+          <div className="ContentHeader">
+            <button
+              type="button"
+              className="ForumHeader"
+              onClick={() => navigate("/forum")}
             >
-              <span>Oba!</span>
-              <span>{iten.mensagem}</span>
+              Fórum
+            </button>
+            <div className="NotificationBadge">
+              <Badge
+                badgeContent={notificationNotRead.length}
+                color="error"
+                onClick={() => handleNotification()}
+              >
+                <NotificationImportantIcon
+                  color="action"
+                  sx={{ height: "6rem", width: "6rem", cursor: "pointer" }}
+                />
+              </Badge>
             </div>
-          ))}
-        </section>
+            <img src={user.avatar} alt="profile" className="ProfileContainer" />
+          </div>
+          {showNotification && (
+            <section className="NotificationContainer">
+              {notification.map((iten) => (
+                <div
+                  key={iten.id}
+                  className={iten.lida ? "Read Notification" : "Notification"}
+                >
+                  <span>Oba!</span>
+                  <span>{iten.mensagem}</span>
+                </div>
+              ))}
+            </section>
+          )}
+        </>
       )}
     </section>
   );
