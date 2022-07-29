@@ -2,17 +2,17 @@ import { Alert, Snackbar } from "@mui/material";
 import useUser from "../../hooks/useUser";
 
 export default function ToastNotification() {
-    const { open, setOpen, errorMesage } = useUser();
+  const { open, setOpen, toastMessage, severity } = useUser();
 
-    const handleClose = (event, reason) => {
-        if (reason === "clickaway") {
-          return;
-        }
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
 
-        setOpen(false);
-      };
+    setOpen(false);
+  };
 
-return (
+  return (
     <Snackbar
       anchorOrigin={{ vertical: "top", horizontal: "right" }}
       open={open}
@@ -22,11 +22,11 @@ return (
     >
       <Alert
         onClose={handleClose}
-        severity="error"
+        severity={severity}
         sx={{ width: "100%", fontSize: 16 }}
       >
-        {errorMesage}
+        {toastMessage}
       </Alert>
     </Snackbar>
-          );
+  );
 }

@@ -12,6 +12,10 @@
     align-items: center;
 }
 
+.NotHeader {
+    display: none;
+}
+
 .Logo {
     cursor: pointer;
     background-color: #FFFFFF;
@@ -95,6 +99,13 @@
 
     border-radius: 50%;
     border: 0.1rem solid #035757;
+}
+
+.BtnAvatar {
+    all: unset;
+    cursor: pointer;
+
+    position: relative;
 }
 
 .NotificationBadge {

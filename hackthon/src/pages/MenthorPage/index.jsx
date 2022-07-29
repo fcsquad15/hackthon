@@ -15,7 +15,7 @@ export default function MenthorPage() {
   const { openDetailPerson } = useUser();
   const [menthors, setMenthors] = useState();
   const { areaId } = useParams();
-  const { setOpen, setErrorMessage } = useUser();
+  const { setOpen, setToastMessage, setSeverity } = useUser();
   const token = getItem("token");
 
   async function loadMenthor() {
@@ -24,7 +24,8 @@ export default function MenthorPage() {
       setMenthors(response.data);
     } catch (error) {
       setOpen(true);
-      setErrorMessage(error.message);
+      setToastMessage(error.message);
+      setSeverity("error");
     }
   }
 

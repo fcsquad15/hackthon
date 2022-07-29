@@ -6,6 +6,8 @@ import NotificationImportantIcon from "@mui/icons-material/NotificationImportant
 import Badge from "@mui/material/Badge";
 import IconSearch from "../../assets/search.svg";
 
+import ModalLogoff from "../ModalLogoff";
+
 import useUser from "../../hooks/useUser";
 import { Get, Post } from "../../services/Conection";
 import { getItem } from "../../utils/Storage";
@@ -19,18 +21,23 @@ export default function Header() {
   const [showNotification, setShowNotification] = useState(false);
   const [notification, setNotification] = useState([]);
   const [notificationNotRead, setNotificationNotRead] = useState([]);
-  const { setOpen, setErrorMessage } = useUser();
+  const [openLogoff, setOpenLogoff] = useState(false);
+  const { setOpen, setToastMessage, setSeverity, openToast } = useUser();
 
   async function loadUser() {
     try {
       const { data, ok } = await Get("/usuario", token);
       if (!ok) {
-        return alert(data);
+        setOpen(true);
+        setToastMessage(data);
+        setSeverity("error");
+        return;
       }
       setUser(data);
     } catch (error) {
       setOpen(true);
-      setErrorMessage(error.message);
+      setToastMessage(error.message);
+      setSeverity("error");
     }
   }
 
@@ -38,14 +45,13 @@ export default function Header() {
     try {
       const { data, ok } = await Get("/notificacoes", token);
       if (!ok) {
-        return alert(data);
+        return openToast(data, "error");
       }
       setNotification(data);
       const notRead = data.filter((iten) => !iten.lida);
       setNotificationNotRead(notRead);
     } catch (error) {
-      setOpen(true);
-      setErrorMessage(error.message);
+      return openToast(error.message, "error");
     }
   }
 
@@ -60,8 +66,7 @@ export default function Header() {
         token
       );
     } catch (error) {
-      setOpen(true);
-      setErrorMessage(error.message);
+      return openToast(error.message, "error");
     }
   }
 
@@ -82,7 +87,7 @@ export default function Header() {
   }, [showNotification]);
 
   return (
-    <section className="Header">
+    <section className={token ? "Header" : "NotHeader"}>
       {token && (
         <>
           <button
@@ -116,7 +121,23 @@ export default function Header() {
                 />
               </Badge>
             </div>
-            <img src={user.avatar} alt="profile" className="ProfileContainer" />
+            <button
+              type="button"
+              className="BtnAvatar"
+              onClick={() => setOpenLogoff(!openLogoff)}
+            >
+              <img
+                src={user.avatar}
+                alt="profile"
+                className="ProfileContainer"
+              />
+            </button>
+            {openLogoff && (
+              <ModalLogoff
+                setOpenLogoff={setOpenLogoff}
+                user={user}
+              />
+            )}
           </div>
           {showNotification && (
             <section className="NotificationContainer">

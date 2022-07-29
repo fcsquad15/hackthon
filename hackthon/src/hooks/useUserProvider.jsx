@@ -5,8 +5,15 @@ function useUserProvider() {
   const [openModal, setOpenModal] = useState(false);
   const [openDetailPerson, setOpenDetailPerson] = useState(false);
   const [currentPerson, setCurrentPerson] = useState("");
-  const [errorMesage, setErrorMessage] = useState("");
+  const [toastMessage, setToastMessage] = useState("");
   const [open, setOpen] = useState(false);
+  const [severity, setSeverity] = useState("");
+
+  function openToast(message, severityLevel) {
+    setOpen(true);
+    setToastMessage(message);
+    setSeverity(severityLevel);
+  }
 
   return {
     openModal,
@@ -15,10 +22,13 @@ function useUserProvider() {
     setOpenDetailPerson,
     currentPerson,
     setCurrentPerson,
-    errorMesage,
-    setErrorMessage,
+    toastMessage,
+    setToastMessage,
     open,
     setOpen,
+    severity,
+    setSeverity,
+    openToast,
   };
 }
 

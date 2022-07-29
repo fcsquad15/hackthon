@@ -17,7 +17,7 @@ export default function ForumPage() {
   const [mentorias, setMentorias] = useState([]);
   const [filter, setFilter] = useState("Área");
   const [openFilter, setOpenFilter] = useState(false);
-  const { setOpen, setErrorMessage } = useUser();
+  const { setOpen, setToastMessage, setSeverity } = useUser();
 
   const token = getItem("token");
 
@@ -27,7 +27,8 @@ export default function ForumPage() {
       setPosts(response.data);
     } catch (error) {
       setOpen(true);
-      setErrorMessage(error.message);
+      setToastMessage(error.message);
+      setSeverity("error");
     }
   }
 
@@ -37,7 +38,8 @@ export default function ForumPage() {
       setMentorias(response.data);
     } catch (error) {
       setOpen(true);
-      setErrorMessage(error.message);
+      setToastMessage(error.message);
+      setSeverity("error");
     }
   }
 

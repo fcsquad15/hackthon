@@ -12,7 +12,7 @@ export default function ModalMenthor() {
 
   // eslint-disable-next-line no-unused-vars
   const [area, setArea] = useState([]);
-  const { setOpen, setErrorMessage, setOpenModal } = useUser();
+  const { setOpen, setToastMessage, setOpenModal, setSeverity } = useUser();
 
   async function loadingAreas() {
     try {
@@ -20,7 +20,8 @@ export default function ModalMenthor() {
       setArea(response.data);
     } catch (error) {
       setOpen(true);
-      setErrorMessage(error.message);
+      setToastMessage(error.message);
+      setSeverity("error");
     }
   }
 

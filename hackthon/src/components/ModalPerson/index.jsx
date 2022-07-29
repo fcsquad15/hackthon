@@ -14,7 +14,7 @@ import { Get, Post } from "../../services/Conection";
 import { getItem } from "../../utils/Storage";
 
 export default function ModalPersonDetail() {
-  const { setOpenDetailPerson, currentPerson, setOpen, setErrorMessage } =
+  const { setOpenDetailPerson, currentPerson, setOpen, setToastMessage, setSeverity } =
     useUser();
   const token = getItem("token");
 
@@ -38,13 +38,13 @@ export default function ModalPersonDetail() {
       if (!ok) {
         return;
       }
-      console.log(data);
       setPerson(data.mentor);
       setAbilities(data.habilidade);
       setAgenda(data.horarios);
     } catch (error) {
       setOpen(true);
-      setErrorMessage(error.message);
+      setToastMessage(error.message);
+      setSeverity("error");
     }
   }
 
@@ -58,7 +58,8 @@ export default function ModalPersonDetail() {
 
     if (!form.horario) {
       setOpen(true);
-      setErrorMessage("É necessário marcar um horário");
+      setToastMessage("É necessário marcar um horário");
+      setSeverity("error");
       return;
     }
 
@@ -74,7 +75,8 @@ export default function ModalPersonDetail() {
 
       if (!ok) {
         setOpen(true);
-        setErrorMessage(data);
+        setToastMessage(data);
+        setSeverity("error");
         return;
       }
 
@@ -82,11 +84,12 @@ export default function ModalPersonDetail() {
         horario: "",
       });
       setOpen(true);
-      setErrorMessage("Mentoria Marcada com sucesso");
+      setToastMessage("Mentoria Marcada com sucesso");
       setOpenDetailPerson(false);
     } catch (error) {
       setOpen(true);
-      setErrorMessage(error.message);
+      setToastMessage(error.message);
+      setSeverity("error");
     }
   }
 

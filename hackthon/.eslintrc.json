@@ -38,6 +38,6 @@
         ],
         "react/jsx-indent": "off",
         "indent": "off",
-        "object-curly-newline":"off"
+        "object-curly-newline": "off"
     }
 }

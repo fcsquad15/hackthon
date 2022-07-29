@@ -9,8 +9,10 @@ import { Post } from "../../services/Conection";
 import "./styles.css";
 
 import { setItem } from "../../utils/Storage";
+import useUser from "../../hooks/useUser";
 
 export default function HomePage() {
+  const { openToast } = useUser();
   const navigate = useNavigate();
   const [form, setForm] = useState({
     email: "",
@@ -26,9 +28,8 @@ export default function HomePage() {
     e.preventDefault();
 
     if (!form.email || !form.senha) {
-      return alert("Campo não informado");
+      return openToast("Campo não informado", "error");
     }
-    console.log(form);
     try {
       const { data, ok } = await Post("/", {
         email: form.email,
@@ -36,14 +37,17 @@ export default function HomePage() {
       });
 
       if (!ok) {
-        return alert(data.mensagem);
+        return openToast(data, "error");
       }
 
-      setItem("token", data.token);
+      openToast("Seja bem vindo a nossa plataforma", "success");
 
-      return navigate("/home");
+      return setTimeout(() => {
+        setItem("token", data.token);
+        navigate("/home");
+      }, 1000);
     } catch (error) {
-      alert(error.message);
+      return openToast(error.message, "error");
     }
   }
 
