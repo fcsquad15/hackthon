@@ -84,7 +84,7 @@ export default function Header() {
       loadUser();
       loadNotification();
     }
-  }, [showNotification]);
+  }, [showNotification, token]);
 
   return (
     <section className={token ? "Header" : "NotHeader"}>
