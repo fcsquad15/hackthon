@@ -1,0 +1,161 @@
+.SignUpPage {
+  max-width: 100vw;
+  min-height: 100vh;
+
+  margin-top: -10rem;
+
+  display: flex;
+  align-items: center;
+
+  font-family: Calibri, sans-serif;
+}
+
+.FormSignUp {
+  width: 50%;
+  height: 100vh;
+
+  padding: 2rem 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #035757;
+}
+
+.FormSignUp h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #035757;
+}
+
+.FormSignUp span {
+  margin: 1rem 0 1.2rem;
+  font-size: 1.2rem;
+}
+
+.ChangePageBtn {
+  all: unset;
+  cursor: pointer;
+  margin: 0 0.4rem;
+
+  color: #035757;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.FormSignUp form {
+  display: flex;
+  flex-direction: column;
+
+  padding: 4rem 2rem 2rem;
+  border-radius: 1rem;
+
+  background-color: #afc3c3;
+}
+
+.FormSpace {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: .6rem;
+
+  font: normal uppercase 1.6rem;
+}
+
+.FormSpace label {
+  font-family: 'Calibri';
+  font-variant: small-caps;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #035757;
+}
+
+.FormSpace input,
+.FormSpace textarea {
+  padding: 2% 4%;
+
+  border: 1px solid #035757;
+  border-radius: 4px;
+
+  font-family: 'Calibri';
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #303030;
+}
+
+.SignUpBtn {
+  align-self: center;
+  cursor: pointer;
+
+  padding: 0.6rem 1.2rem;
+  margin-top: 1.2rem;
+
+  background-color: #035757;
+  border: none;
+  border-radius: 4px;
+
+  font-family: 'Calibri';
+  font-size: 1.2rem;
+  letter-spacing: 0.08rem;
+  font-weight: 700;
+
+  color: #FFFFFF;
+}
+
+.FormSignUp button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.InfosSection {
+  width: 50%;
+  height: 100%;
+
+  padding: 4rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  gap: 2rem;
+
+  font-size: 1.6rem;
+}
+
+.InfosSection h1 {
+  align-self: center;
+
+  font-size: 2rem;
+}
+
+.InfosSection a {
+  color: #035757;
+  cursor: pointer;
+}
+
+.InfosSection a:hover {
+  transform: scale(1.05);
+}
+
+@media screen and (max-width:800px) {
+  .SignUpPage {
+    flex-wrap: wrap;
+  }
+
+  .FormSignUp,
+  .InfosSection {
+    height: 100vh;
+    width: 100%;
+  }
+
+  .FormSignUp form {
+    width: 70%;
+    margin: 1rem;
+  }
+
+  .FormSpace input,
+  .FormSpace textarea {
+    padding: 1% 2%;
+  }
+}

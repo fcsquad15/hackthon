@@ -1,23 +1,55 @@
-import axios from "axios";
+// const BASE_URL = "https://hackthon-squad15.herokuapp.com";
+const BASE_URL = "http://localhost:8000";
 
-const conection = axios.create({
-  baseURL: "https://hackthon-squad15.herokuapp.com",
-  timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json'
-  }
-});
+async function Post(resource, data, token) {
+  const response = await fetch(BASE_URL + resource, {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+      token,
+    },
+  });
 
+  const responseData = await response.json();
 
-export function Get(url) {
-  return conection.get(url);
+  return { data: responseData, ok: response.ok };
 }
 
+async function Get(resource, token) {
+  const response = await fetch(
+    BASE_URL + resource,
+    {
+      method: "GET",
+      headers: {
+      "Content-Type": "application/json",
+        token,
+      },
+    },
+  );
 
-export function Post(url, key, data) {
-  return conection.post(url, key, data);
+  const responseData = await response.json();
+
+  return { data: responseData, ok: response.ok };
 }
 
-export function Put(url, key, data) {
-  return conection.put(url, key, data);
+async function Put(resource, token, data) {
+  const response = await fetch(BASE_URL + resource, {
+    method: "PUT",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+      token,
+    },
+  });
+
+  const responseData = await response.json();
+
+  return { data: responseData, ok: response.ok };
 }
+
+export {
+  Get,
+  Post,
+  Put,
+};

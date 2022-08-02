@@ -1,17 +1,13 @@
-import React from 'react';
-import * as ReactDOMClient from 'react-dom/client';
-import './index.css';
-import Main from './pages/Main';
+/* eslint-disable react/jsx-indent */
+import * as ReactDOMClient from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import Main from "./App";
+import "./index.css";
 
+const root = ReactDOMClient.createRoot(document.getElementById("root"));
 
-const container = document.getElementById('root');
-
-// Create a root.
-const root = ReactDOMClient.createRoot(container);
-
-// Initial render: Render an element to the root.
-root.render(<Main />);
-
-// During an update, there's no need to pass the container again.
-// root.render(<Main tab="profile" />);
-
+root.render(
+    <BrowserRouter>
+        <Main />
+    </BrowserRouter>,
+);

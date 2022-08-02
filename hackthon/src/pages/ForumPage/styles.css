@@ -1,0 +1,271 @@
+.ForumPage {
+  display: flex;
+  justify-content: flex-end;
+
+  padding: 6rem 10rem 0;
+
+  background-color: #c2d1d1;
+}
+
+.ForumSection {
+  width: 50vw;
+  margin-right: 4rem;
+}
+
+.ForumQuestion {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 2rem 8rem 3rem;
+  margin-bottom: 4rem;
+  border-radius: 8px;
+
+  background-color: #ffffff;
+}
+
+.ForumTitle {
+  text-align: center;
+  margin-bottom: 1rem;
+
+  font-family: "Calibri";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 3.6rem;
+  line-height: 4.4rem;
+
+  letter-spacing: -0.011rem;
+
+  color: #464646;
+}
+
+.NewQuestion {
+  border: none;
+  cursor: pointer;
+
+  background: #e8505b;
+  border-radius: 2rem;
+
+  padding: 0.5rem 1.8rem;
+
+  font-style: normal;
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 2.4rem;
+  text-align: center;
+  letter-spacing: -0.011rem;
+
+  color: #ffffff;
+}
+
+.NewQuestion:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.ForumSpace {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 1.2rem;
+  margin-bottom: 2.4rem;
+}
+
+.ForumFilter {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  font-family: "Calibri";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.6rem;
+  color: rgba(116, 116, 116);
+}
+
+.ForumFilter span {
+  margin: 0 0.2rem;
+}
+
+.ForumFilter button {
+  cursor: pointer;
+  border: none;
+  border-radius: 0.4rem;
+
+  background: none;
+  color: rgb(116, 116, 116);
+
+  font-family: "Calibri";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.6rem;
+}
+
+.ForumFilter button:hover {
+  opacity: 0.8;
+}
+
+.ListFilter {
+  position: absolute;
+
+  bottom: -5.5rem;
+  right: 2rem;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.ListFilter button {
+  background: #ffffffb6;
+}
+
+.ForumPost {
+  height: 15rem;
+
+  display: flex;
+
+  padding: 1.2rem;
+
+  background: #e8f0f0;
+  border-radius: 1.2rem;
+
+  font-family: "Calibri";
+  font-style: normal;
+  font-weight: 400;
+}
+
+.AvatarPost {
+  width: 70px;
+  height: 70px;
+
+  border-radius: 50%;
+
+  margin-right: 3rem;
+}
+
+.PostContent {
+  max-width: calc(100%-100px);
+
+  display: flex;
+  flex-direction: column;
+}
+
+.PostName {
+  font-size: 2rem;
+  letter-spacing: -0.011rem;
+
+  color: #000000;
+
+  margin-bottom: 0;
+}
+
+.PostArea {
+  font-size: 1.2rem;
+  letter-spacing: -0.011rem;
+
+  color: #515151;
+}
+
+.PostQuestion {
+  height: 4rem;
+
+  margin-top: 1.2rem;
+
+  font-weight: 400;
+  font-size: 1.4rem;
+  letter-spacing: -0.011rem;
+
+  color: #000000;
+
+  overflow-y: auto;
+}
+
+.PostBtn {
+  width: 12rem;
+
+  padding: 0.4rem 1rem;
+
+  border: 1px solid rgb(3, 87, 87);
+  border-radius: 1.2rem;
+
+  cursor: pointer;
+
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1.2rem;
+  letter-spacing: -0.011rem;
+
+  color: #9abcbc;
+}
+
+.PostBtn:hover {
+  transform: scale(1.05);
+  opacity: 0.8;
+}
+
+.Schedule {
+  width: 20vw;
+
+  font-family: "Calibri";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 2rem;
+  line-height: 2.4rem;
+  letter-spacing: -0.011rem;
+
+  color: #035757;
+}
+
+.ScheduleTitle {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 2.4rem;
+  letter-spacing: -0.011rem;
+
+  margin-bottom: 1.4rem;
+}
+
+.ScheduleIten {
+  display: flex;
+  justify-content: space-between;
+
+  margin-bottom: 1rem;
+}
+
+.ScheduleTrash {
+  margin-left: 0.8rem;
+  cursor: pointer;
+}
+
+.SchedulePlus {
+  cursor: pointer;
+  float: right;
+  display: flex;
+  gap: 0.8rem;
+}
+
+@media screen and (max-width: 800px) {
+  .ForumPage {
+    padding: 2rem;
+  }
+
+  .ForumSection {
+    width: 100%;
+    margin: 0;
+  }
+
+  .AvatarPost {
+    display: none;
+  }
+
+  .Schedule {
+    display: none;
+  }
+}

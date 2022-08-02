@@ -1,0 +1,65 @@
+.LogoffModal {
+    position: absolute;
+    bottom: -9rem;
+    right: 6rem;
+
+    width: 20rem;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 1rem;
+
+    border-radius: 1rem;
+
+    background-color: #c2d1d1;
+    border: 1px solid #035757;
+}
+
+.LogoffInfos {
+    padding-bottom: 0.8rem;
+    margin-bottom: 0.4rem;
+    border-bottom: 1px solid #035757;
+}
+
+.LogoffInfos span {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.LogoffName {
+    font-size: 1.6rem;
+    font-weight: bold;
+}
+
+.LogoffEmail {
+    font-size: 1.2rem;
+    font-style: oblique;
+}
+
+.LogoffModal button {
+    align-self: center;
+
+    cursor: pointer;
+
+    min-width: 10rem;
+    padding: 1rem;
+    border-radius: 0.8rem;
+
+    background-color: #035757;
+    color: #ffffff;
+    border: none;
+
+    font-size: 1.2rem;
+    letter-spacing: 0.1rem;
+    font-weight: bold;
+}
+
+.LogoffModal button:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+}
