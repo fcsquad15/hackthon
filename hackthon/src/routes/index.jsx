@@ -5,6 +5,7 @@ import ErrorPage from "../pages/ErrorPage/index";
 import ForumPage from "../pages/ForumPage";
 import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/LoginPage";
+import SignUpPage from "../pages/SignUpPage";
 import MenthorPage from "../pages/MenthorPage";
 import { getItem } from "../utils/Storage";
 
@@ -18,6 +19,7 @@ function Index() {
   return (
     <Routes>
       <Route path="/" element={<LoginPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
       <Route element={<ProtectedRoutes redirectTo="/" />}>
         <Route path="/home" element={<HomePage />} />
         <Route path="/forum" element={<ForumPage />} />

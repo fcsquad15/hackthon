@@ -2,6 +2,7 @@
 /* eslint-disable operator-linebreak */
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
 import Card from "../../components/CardPerson";
 import ModalDetailPerson from "../../components/ModalPerson";
 import useUser from "../../hooks/useUser";

@@ -2,22 +2,22 @@
 import { useEffect, useState } from "react";
 import useUser from "../../hooks/useUser";
 
+import Arrow from "../../assets/arrowBottom.svg";
 import Lixo from "../../assets/lixo.svg";
 import Plus from "../../assets/plus.svg";
-import Arrow from "../../assets/arrowBottom.svg";
 import Profile from "../../assets/profile-icon-png-898.png";
 
 import { Get } from "../../services/Conection";
 
-import "./styles.css";
 import { getItem } from "../../utils/Storage";
+import "./styles.css";
 
 export default function ForumPage() {
   const [posts, setPosts] = useState([]);
   const [mentorias, setMentorias] = useState([]);
   const [filter, setFilter] = useState("Área");
   const [openFilter, setOpenFilter] = useState(false);
-  const { setOpen, setToastMessage, setSeverity } = useUser();
+  const { openToast } = useUser();
 
   const token = getItem("token");
 
@@ -26,9 +26,7 @@ export default function ForumPage() {
       const response = await Get("/forum", token);
       setPosts(response.data);
     } catch (error) {
-      setOpen(true);
-      setToastMessage(error.message);
-      setSeverity("error");
+      openToast(error.message, "error");
     }
   }
 
@@ -37,9 +35,7 @@ export default function ForumPage() {
       const response = await Get("/mentorias/marcadas", token);
       setMentorias(response.data);
     } catch (error) {
-      setOpen(true);
-      setToastMessage(error.message);
-      setSeverity("error");
+      openToast(error.message, "error");
     }
   }
 
@@ -116,18 +112,20 @@ export default function ForumPage() {
       </section>
       <section className="Schedule">
         <h2 className="ScheduleTitle">Mentorias Marcadas</h2>
-        {mentorias.map((mentoria) => (
-          <div key={mentoria.id} className="ScheduleIten">
-            <span>
-              {new Date(mentoria.dia).getDate()}/
-              {new Date(mentoria.dia).getMonth()}
-            </span>
-            <span>
-              {mentoria.hora.slice(0, 2)}:{mentoria.hora.slice(3, 5)}
-              <img src={Lixo} alt="trash" className="ScheduleTrash" />
-            </span>
-          </div>
-        ))}
+        {mentorias === "Sem mentorias marcadas."
+          ? <span className="ScheduleIten">{mentorias}</span>
+          : mentorias.map((mentoria) => (
+            <div key={mentoria.id} className="ScheduleIten">
+              <span>
+                {new Date(mentoria.dia).getDate()}/
+                {new Date(mentoria.dia).getMonth()}
+              </span>
+              <span>
+                {mentoria.hora.slice(0, 2)}:{mentoria.hora.slice(3, 5)}
+                <img src={Lixo} alt="trash" className="ScheduleTrash" />
+              </span>
+            </div>
+          ))}
         <span className="SchedulePlus">
           Ver mais
           <img src={Plus} alt="+" />
