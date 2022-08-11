@@ -87,7 +87,9 @@ export default function Header() {
   }, [showNotification, token]);
 
   useEffect(() => {
-    loadNotification();
+    if (token) {
+      loadNotification();
+    }
   }, [openDetailPerson]);
 
   return (
