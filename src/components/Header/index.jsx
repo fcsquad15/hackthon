@@ -22,7 +22,7 @@ export default function Header() {
   const [notification, setNotification] = useState([]);
   const [notificationNotRead, setNotificationNotRead] = useState([]);
   const [openLogoff, setOpenLogoff] = useState(false);
-  const { setOpen, setToastMessage, setSeverity, openToast } = useUser();
+  const { setOpen, setToastMessage, setSeverity, openToast, openDetailPerson } = useUser();
 
   async function loadUser() {
     try {
@@ -85,6 +85,10 @@ export default function Header() {
       loadNotification();
     }
   }, [showNotification, token]);
+
+  useEffect(() => {
+    loadNotification();
+  }, [openDetailPerson]);
 
   return (
     <section className={token ? "Header" : "NotHeader"}>
