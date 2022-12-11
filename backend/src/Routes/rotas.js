@@ -1,3 +1,4 @@
+/* eslint-disable comma-dangle */
 const express = require("express");
 const noAuth = require("../controladores/noAuth");
 const usuarios = require("../controladores/usuarios");
@@ -22,7 +23,7 @@ rotas.get("/areas", utilitarios.listarAreas);
 // Autenticação
 rotas.use(verificarLogin);
 
-//rotas para manuseio do usuário
+// rotas para manuseio do usuário
 rotas.get("/usuarios", usuarios.listarUsuarios);
 rotas.get("/usuario", usuarios.obterUsuario);
 rotas.patch("/usuario", usuarios.atualizarUsuario);
@@ -33,7 +34,7 @@ rotas.delete("/usuarios/", usuarios.deletarUsuario);
 rotas.post("/usuarios/areas", usuarios.addAreaUsuario);
 rotas.get("/usuarios/areas/:id", usuarios.listarAreaUsuario);
 
-//rotas para notificações
+// rotas para notificações
 rotas.get("/notificacoes", notificacao.listarNotificacoes);
 rotas.post("/notificacoes", notificacao.visualizarTodasNotificacoes);
 
