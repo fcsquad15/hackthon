@@ -11,6 +11,7 @@ import ModalLogoff from "../ModalLogoff";
 import useUser from "../../hooks/useUser";
 import { Get, Post } from "../../services/Conection";
 import { getItem } from "../../utils/Storage";
+import AvatarIcon from "../../assets/profile-icon-png-898.png";
 import "./style.css";
 
 export default function Header() {
@@ -22,7 +23,9 @@ export default function Header() {
   const [notification, setNotification] = useState([]);
   const [notificationNotRead, setNotificationNotRead] = useState([]);
   const [openLogoff, setOpenLogoff] = useState(false);
-  const { setOpen, setToastMessage, setSeverity, openToast, openDetailPerson } = useUser();
+  // eslint-disable-next-line operator-linebreak
+  const { setOpen, setToastMessage, setSeverity, openToast, openDetailPerson } =
+    useUser();
 
   async function loadUser() {
     try {
@@ -132,17 +135,26 @@ export default function Header() {
               className="BtnAvatar"
               onClick={() => setOpenLogoff(!openLogoff)}
             >
-              <img
-                src={user.avatar}
-                alt="profile"
-                className="ProfileContainer"
-              />
+              {user.avatar ? (
+                <img
+                  src={
+                    user.avatar
+                      ? user.avatar
+                      : "../../assets/profile-icon-png-898.png"
+                  }
+                  alt="profile"
+                  className="ProfileContainer"
+                />
+              ) : (
+                <img
+                  src={AvatarIcon}
+                  alt="profile"
+                  className="ProfileContainer"
+                />
+              )}
             </button>
             {openLogoff && (
-              <ModalLogoff
-                setOpenLogoff={setOpenLogoff}
-                user={user}
-              />
+              <ModalLogoff setOpenLogoff={setOpenLogoff} user={user} />
             )}
           </div>
           {showNotification && (

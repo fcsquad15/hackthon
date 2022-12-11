@@ -1,3 +1,5 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable camelcase */
 const bcrypt = require("bcrypt");
 const conexao = require("../Server/conexao");
 
@@ -10,7 +12,7 @@ const usersSchema = require("../Validações/usersSchema");
 const messageError = require("../Mensagens/errorToast");
 const messageSuccess = require("../Mensagens/successToast");
 
-//ok
+// ok
 const listarUsuarios = async (req, res) => {
   try {
     const usuarios = await usersModel.listUsers();
@@ -21,13 +23,13 @@ const listarUsuarios = async (req, res) => {
         .json({ mensagem: "Não foi possível encontrar usuários" });
     }
 
-    res.status(200).json(usuarios);
+    return res.status(200).json(usuarios);
   } catch (error) {
     return res.status(400).json(error);
   }
 };
 
-//ok
+// ok
 const obterUsuario = async (req, res) => {
   try {
     return res.status(200).json(req.usuario);
@@ -36,7 +38,7 @@ const obterUsuario = async (req, res) => {
   }
 };
 
-//ok
+// ok
 const addHabilidadeUsuario = async (req, res) => {
   const { id: usuario_id } = req.usuario;
   const { habilidade_id } = req.body;
@@ -64,13 +66,15 @@ const addHabilidadeUsuario = async (req, res) => {
       return res.status(400).json(messageError.userAddInfo);
     }
 
-    res.status(201).json({ mensagem: "Habilidade inserida com sucesso" });
+    return res
+      .status(201)
+      .json({ mensagem: "Habilidade inserida com sucesso" });
   } catch (error) {
     return res.status(400).json(error.message);
   }
 };
 
-//ok
+// ok
 const listarHabilidadesUsuario = async (req, res) => {
   const { id } = req.params;
 
@@ -167,10 +171,10 @@ const listarAreaUsuario = async (req, res) => {
   return res.status(200).json();
 };
 
-//ok
+// ok
 const atualizarUsuario = async (req, res) => {
   const { id } = req.usuario;
-  let { nome, email, senha, bio, avatar, area } = req.body;
+  const { nome, email, senha, bio, avatar, area } = req.body;
 
   if (!nome & !email & !senha & !bio & !avatar & !area) {
     return res.status(400).json(messageError.mandatoryInfo);

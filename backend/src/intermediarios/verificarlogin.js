@@ -1,5 +1,5 @@
-const noAuthModel = require("../Models/noAuthModel");
 const jwt = require("jsonwebtoken");
+const noAuthModel = require("../Models/noAuthModel");
 const messageError = require("../Mensagens/errorToast");
 
 const segredo = process.env.TOKEN_SECRET;
@@ -28,7 +28,7 @@ const verificarLogin = async (req, res, next) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ mensagem: "Ocorreu um erro desconhecido. - " + error.message });
+      .json({ mensagem: `Ocorreu um erro desconhecido. - ${error.message}` });
   }
 };
 

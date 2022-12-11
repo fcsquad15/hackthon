@@ -8,11 +8,11 @@ const messageError = require("../Mensagens/errorToast");
 const messageSuccess = require("../Mensagens/successToast");
 
 const jwtSecret = process.env.TOKEN_SECRET;
-const supabase = require("../supabase/supabase")
+const supabase = require("../supabase/supabase");
 
 const signUpUser = async (req, res) => {
   let { nome, email, senha, avatar, bio, area } = req.body;
-  const avatarName = nome.replace(" ", "_")
+  const avatarName = nome.replace(" ", "_");
   try {
     await noAuthSchema.signUpUser.validate(req.body);
     const emailExists = await noAuthModel.emailExists(email);
@@ -23,26 +23,24 @@ const signUpUser = async (req, res) => {
     const encryptedPassword = await bcrypt.hash(senha.trim(), 10);
 
     if (avatar) {
-      const buffer = Buffer.from(avatar, 'base64');
+      const buffer = Buffer.from(avatar, "base64");
 
-      const { data, error } = await supabase
-        .storage
+      const { data, error } = await supabase.storage
         .from(process.env.SUPABASE_BUCKET)
-        .upload(`FCamara/${avatarName}.jpeg`, buffer)
+        .upload(`FCamara/${avatarName}.jpeg`, buffer);
 
       if (error) {
-        return res.status(400).json(error.message)
+        return res.status(400).json(error.message);
       }
 
-      const { publicURL, error: errorPublicURL } = supabase
-        .storage
+      const { publicURL, error: errorPublicURL } = supabase.storage
         .from(process.env.SUPABASE_BUCKET)
-        .getPublicUrl(`FCamara/${avatarName}.jpeg`)
+        .getPublicUrl(`FCamara/${avatarName}.jpeg`);
 
       if (errorPublicURL) {
-        return res.status(400).json(error.message)
+        return res.status(400).json(error.message);
       }
-      avatar = publicURL
+      avatar = publicURL;
     }
 
     const addedUser = await noAuthModel.insertUser(
@@ -82,7 +80,7 @@ const login = async (req, res) => {
     const { senha: _, ...userData } = user;
 
     return res.status(200).json({
-      userData: userData,
+      userData,
       token,
     });
   } catch (error) {
